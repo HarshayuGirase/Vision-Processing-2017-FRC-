@@ -11,8 +11,8 @@ def getDistanceAngle(xCoordinate):
 	return angle
 
 def hopperCovered():
-	img = cv2.imread('/Users/harshayugirase/Desktop/Depth Images 2/Hopper1.bmp') #image read
-	depthMat = cv2.imread('/Users/harshayugirase/Desktop/Depth Images 2/Hopper1.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
+	img = cv2.imread('./Hopper1.bmp') #image read
+	depthMat = cv2.imread('./Hopper1.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
 	start_time = time.time()
 	kernel = np.ones((3,3),np.uint8)
 	erosion = cv2.erode(img,kernel,iterations = 15)
