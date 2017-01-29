@@ -49,9 +49,12 @@ def lowGoalCovered():
 				contours.pop(x)
 				x=x-1
 
+	print len(contours)
 	for c in contours: # compute the center of the contour
-		M = cv2.moments(c, 0)
-		print M
+		
+
+		M = cv2.moments(c)
+		
 		cX = 0
 		cY = 0
 		if(M["m00"]!=0):
