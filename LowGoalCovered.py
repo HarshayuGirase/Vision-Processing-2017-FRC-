@@ -50,7 +50,8 @@ def lowGoalCovered():
 				x=x-1
 
 	for c in contours: # compute the center of the contour
-		M = cv2.moments(c)
+		M = cv2.moments(c, 0)
+		print M
 		cX = 0
 		cY = 0
 		if(M["m00"]!=0):
