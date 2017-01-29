@@ -20,8 +20,10 @@ def lowGoalCovered():
 	edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
 	
 
-	a, contours, c = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
-	d, contoursParent, e = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
+	array1 = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
+	contours = array1[1]
+	array2 = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
+	contoursParent = array2[1]
 
 	#cv2.drawContours(img,contours,4,(0,255,0),3)
 	xCenterValues = []; yCenterValues = []
