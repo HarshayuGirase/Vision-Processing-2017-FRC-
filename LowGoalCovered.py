@@ -49,7 +49,7 @@ def lowGoalCovered():
 				contours.pop(x)
 				x=x-1
 
-	print len(contours)
+	print contours
 	for c in contours: # compute the center of the contour
 		
 
