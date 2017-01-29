@@ -22,6 +22,7 @@ def lowGoalCovered():
 
 	array1 = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
 	contours = array1[1]
+	print len(contours)
 	array2 = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
 	contoursParent = array2[1]
 
@@ -49,10 +50,8 @@ def lowGoalCovered():
 				contours.pop(x)
 				x=x-1
 
-	print contours
+	print len(contours)
 	for c in contours: # compute the center of the contour
-		
-
 		M = cv2.moments(c)
 		
 		cX = 0
