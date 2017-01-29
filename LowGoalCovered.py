@@ -18,7 +18,6 @@ def lowGoalCovered():
 	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
-	cv2.imwrite('./output.bmp', edges)
 
 	#cv2 version returns 2 or 3 depending on version :/
 	try:
