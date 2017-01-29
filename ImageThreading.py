@@ -5,6 +5,7 @@ import multiprocessing
 import math
 from threading import Thread
 from Queue import Queue
+from collections import deque
 
 cannyImages = []
 
@@ -19,21 +20,11 @@ def threadImage():
 	
 	start_time = time.time()
 
-	mainQueue = Queue()
-	mainQueue.put('./Boiler1.bmp', './Boiler2.bmp', './Boiler3.bmp', '.Boiler4.bmp')
+	mainQueue = deque()
+	mainQueue.append('./Boiler1.bmp')
 	
-	thread1 = Thread(target=processImage(region1,'region1'))
-	thread2 = Thread(target=processImage(region2,'region2'))
-	thread3 = Thread(target=processImage(region3,'region3'))
-	thread4 = Thread(target=processImage(region4,'region4'))
-
-	thread1.start()
-	thread2.start()
-	thread3.start()
-	thread4.start()
-	
-	while(mainQUeue.qsize()>0):
-		img = cv2.imread(mainQueue.get(0)) #image read
+	while(len(mainQueue)>0):
+		img = cv2.imread('./Boiler1.bmp') #image read
 		width = len(img[0])
 		height = sum([len(arr) for arr in img])/width
 
@@ -42,8 +33,17 @@ def threadImage():
 		region3 = img[height/2:(3*height/4), 0:width]
 		region4 = img[(3*height/4):height, 0:width]
 
+		thread1 = Thread(target=processImage(region1,'region1'))
+		thread2 = Thread(target=processImage(region2,'region2'))
+		thread3 = Thread(target=processImage(region3,'region3'))
+		thread4 = Thread(target=processImage(region4,'region4'))
 
+		thread1.start()
+		thread2.start()
+		thread3.start()
+		thread4.start()
 
+		mainQueue.popleft()
 
 
 	combinedCannyImage = cannyImages[0]
