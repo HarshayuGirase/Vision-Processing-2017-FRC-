@@ -8,22 +8,32 @@ from Queue import Queue
 from collections import deque
 
 cannyImages = []
+mainQueue = deque()
+mainQueue.append('./Boiler1.bmp')
 
-def processImage(imageInput,name):
-	kernel = np.ones((3,3),np.uint8)
-	erosion = cv2.erode(imageInput,kernel,iterations = 20)
-	dilation = cv2.dilate(erosion,kernel,iterations = 8)
-	edges = cv2.Canny(dilation,100,200)
-	cannyImages.append(edges)
+def processImage():
+	while(len(mainQueue)>0):
+		kernel = np.ones((3,3),np.uint8)
+		erosion = cv2.erode(imageInput,kernel,iterations = 20)
+		dilation = cv2.dilate(erosion,kernel,iterations = 8)
+		edges = cv2.Canny(dilation,100,200)
+		cannyImages.append(edges)
 
 def threadImage():
 	
 	start_time = time.time()
 
-	mainQueue = deque()
-	mainQueue.append('./Boiler1.bmp')
+	thread1 = Thread(target=processImage(), args=())
+	thread2 = Thread(target=processImage(), args=())
+	thread3 = Thread(target=processImage(), args=())
+	thread4 = Thread(target=processImage(), args=())
+
+
+	thread1.start()
+	thread2.start()
+	thread3.start()
+	thread4.start()
 	
-	while(len(mainQueue)>0):
 		img = cv2.imread('./Boiler1.bmp') #image read
 		width = len(img[0])
 		height = sum([len(arr) for arr in img])/width
@@ -32,16 +42,6 @@ def threadImage():
 		region2 = img[height/4:height/2, 0:width]
 		region3 = img[height/2:(3*height/4), 0:width]
 		region4 = img[(3*height/4):height, 0:width]
-
-		thread1 = Thread(target=processImage(region1,'region1'))
-		thread2 = Thread(target=processImage(region2,'region2'))
-		thread3 = Thread(target=processImage(region3,'region3'))
-		thread4 = Thread(target=processImage(region4,'region4'))
-
-		thread1.start()
-		thread2.start()
-		thread3.start()
-		thread4.start()
 
 		mainQueue.popleft()
 
