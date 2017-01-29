@@ -18,9 +18,10 @@ def lowGoalCovered():
 	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
-	
+	cv2.imwrite('./output.bmp', edges)
 
-	(_, contours, _) = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
+	contours = np.ndarray
+	_,contours,_ = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
 	(_, contoursParent, _) = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
 
 	#cv2.drawContours(img,contours,4,(0,255,0),3)
