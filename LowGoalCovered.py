@@ -160,7 +160,6 @@ def lowGoalOpen():
 				xCenterValues.append(cX)
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
-		#######################################
 
 	for i in range(0,len(xCenterValues)):
 		width = len(edges[0])

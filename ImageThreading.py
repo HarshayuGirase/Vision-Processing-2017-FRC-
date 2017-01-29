@@ -4,6 +4,7 @@ import time
 import multiprocessing
 import math
 from threading import Thread
+from Queue import Queue
 
 cannyImages = []
 
@@ -15,18 +16,12 @@ def processImage(imageInput,name):
 	cannyImages.append(edges)
 
 def threadImage():
-	img = cv2.imread('./Hopper1.bmp') #image read
-
+	
 	start_time = time.time()
 
-	width = len(img[0])
-	height = sum([len(arr) for arr in img])/width
-
-	region1 = img[0:height/4, 0:width]
-	region2 = img[height/4:height/2, 0:width]
-	region3 = img[height/2:(3*height/4), 0:width]
-	region4 = img[(3*height/4):height, 0:width]
-
+	mainQueue = Queue()
+	mainQueue.put('./Boiler1.bmp', './Boiler2.bmp', './Boiler3.bmp', '.Boiler4.bmp')
+	
 	thread1 = Thread(target=processImage(region1,'region1'))
 	thread2 = Thread(target=processImage(region2,'region2'))
 	thread3 = Thread(target=processImage(region3,'region3'))
@@ -36,18 +31,27 @@ def threadImage():
 	thread2.start()
 	thread3.start()
 	thread4.start()
+	
+	while(mainQUeue.qsize()>0):
+		img = cv2.imread(mainQueue.get(0)) #image read
+		width = len(img[0])
+		height = sum([len(arr) for arr in img])/width
 
-	thread1.join()
-	thread2.join()
-	thread3.join()
-	thread4.join()
+		region1 = img[0:height/4, 0:width]
+		region2 = img[height/4:height/2, 0:width]
+		region3 = img[height/2:(3*height/4), 0:width]
+		region4 = img[(3*height/4):height, 0:width]
+
+
+
+
 
 	combinedCannyImage = cannyImages[0]
 	c = np.concatenate((combinedCannyImage , cannyImages[1]))
 	d = np.concatenate((c,cannyImages[2]))
 	edges = np.concatenate((d,cannyImages[3]))
 
-	cv2.imwrite('/Users/harshayugirase/Desktop/CombinedCanny.bmp',edges)
+	
 
 
 	print("--- %s seconds ---" % (time.time() - start_time))
