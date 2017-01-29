@@ -17,8 +17,13 @@ def calibrateWithLowGoal(imageFileBMP, imageFilePNG):
 	dilation = cv2.dilate(erosion,kernel,iterations = 10)
 	edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
 
-	(_, contours, _) = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
-	(_, contoursParent, _) = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
+	#cv2 version returns 2 or 3 depending on version :/
+	try:
+		contours,_ = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
+		contoursParent, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
+	except:
+		_,contours,_ = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
+		_,contoursParent, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
 
 	#cv2.drawContours(img,contours,4,(0,255,0),3)
 	xCenterValues = []; yCenterValues = []
@@ -70,13 +75,13 @@ def calibrateWithLowGoal(imageFileBMP, imageFilePNG):
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(yCenterValues[i]>250 and yCenterValues[i]<340 and cv2.contourArea(FINALCONTOURS[i])>3000): #modify contour area later
+		if(yCenterValues[i]>230 and yCenterValues[i]<320 and cv2.contourArea(FINALCONTOURS[i])>3000): #modify contour area later
 			YCENTER = yCenterValues[i]
 			ANGLE = getDistanceAngle(xCenterValues[i])
 	
 
 	if (ANGLE <= 3 and ANGLE >=-3):
-		if(YCENTER>320 and YCENTER <330):
+		if(YCENTER>230 and YCENTER <320):
 			return 'CALIBRATED :D'
 		else:
 			if(YCENTER>330):

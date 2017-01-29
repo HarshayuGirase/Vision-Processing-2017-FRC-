@@ -11,8 +11,8 @@ def getDistanceAngle(xCoordinate):
 	return angle
 
 def lowGoalCovered():
-	img = cv2.imread('./Boiler1.bmp') #image read
-	depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
+	img = cv2.imread('./Boiler3.bmp') #image read
+	depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
 	start_time = time.time()
 	kernel = np.ones((3,3))
 	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
@@ -52,7 +52,6 @@ def lowGoalCovered():
 				contours.pop(x)
 				x=x-1
 
-	print len(contours)
 	for c in contours: # compute the center of the contour
 		M = cv2.moments(c)
 		
@@ -80,7 +79,7 @@ def lowGoalCovered():
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(yCenterValues[i]>220 and yCenterValues[i]<330 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
+		if(yCenterValues[i]>230 and yCenterValues[i]<320 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
 			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),10,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...

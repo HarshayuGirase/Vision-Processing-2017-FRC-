@@ -13,7 +13,6 @@ def processImage(imageInput,name):
 	dilation = cv2.dilate(erosion,kernel,iterations = 10)
 	edges = cv2.Canny(dilation,100,200)
 	cannyImages.append(edges)
-	cv2.imwrite('/Users/harshayugirase/Desktop/' + name + '.bmp', edges)
 
 def threadImage():
 	img = cv2.imread('./Hopper1.bmp') #image read
@@ -27,9 +26,6 @@ def threadImage():
 	region2 = img[height/4:height/2, 0:width]
 	region3 = img[height/2:(3*height/4), 0:width]
 	region4 = img[(3*height/4):height, 0:width]
-
-	print img.shape
-	print region1.shape
 
 	thread1 = Thread(target=processImage(region1,'region1'))
 	thread2 = Thread(target=processImage(region2,'region2'))
