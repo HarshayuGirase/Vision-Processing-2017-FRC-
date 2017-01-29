@@ -9,8 +9,8 @@ cannyImages = []
 
 def processImage(imageInput,name):
 	kernel = np.ones((3,3),np.uint8)
-	erosion = cv2.erode(imageInput,kernel,iterations = 15)
-	dilation = cv2.dilate(erosion,kernel,iterations = 10)
+	erosion = cv2.erode(imageInput,kernel,iterations = 20)
+	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	edges = cv2.Canny(dilation,100,200)
 	cannyImages.append(edges)
 
@@ -60,8 +60,8 @@ def withoutThreading():
 	depthMat = cv2.imread('./Hopper1.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
 	start_time = time.time()
 	kernel = np.ones((3,3),np.uint8)
-	erosion = cv2.erode(img,kernel,iterations = 15)
-	dilation = cv2.dilate(erosion,kernel,iterations = 10)
+	erosion = cv2.erode(img,kernel,iterations = 20)
+	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering 
 
 	print("--- %s seconds ---" % (time.time() - start_time))
