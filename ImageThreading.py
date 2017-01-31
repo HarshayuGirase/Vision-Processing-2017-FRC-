@@ -20,7 +20,7 @@ thread1 = Thread(target=processImage, args=())
 thread1.start()
 
 x=0
-while x<500:
+while x<5000000:
 	if not thread1.isAlive():
 		thread1.run()
 	x=x+1
