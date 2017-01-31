@@ -1,0 +1,7 @@
+[1485822406.12]log File./elog_1485822406.12.txt
+[1485822406.12]port in use by another program
+[1485822406.12]global name 'serial' is not defined
+[1485822406.12]Broadcast bind failed. Error Code : 13 Message Permission denied
+
+[1485822406.12]Broadcast bind failed. Error Code : 48 Message Address already in use
+[1485822407.12]cleanup
