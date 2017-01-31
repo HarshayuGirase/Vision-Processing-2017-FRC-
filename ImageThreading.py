@@ -1,27 +1,42 @@
-import numpy as np
-import cv2
 import time
 import multiprocessing
 import math
-from threading import Thread
+import time
+from threading import Thread, current_thread
 from Queue import Queue
 
-cannyImages = []
-mainQueue = Queue()
-mainQueue.put('./Boiler1.bmp')
-mainQueue.put('./Boiler2.bmp')
 
-def processImage():
-	print 'lol' #just to test
+imageQueue = Queue()
 
-
-#Main Program Start 
-thread1 = Thread(target=processImage, args=())
-thread1.start()
 
 x=0
-while x<5000000:
-	if not thread1.isAlive():
-		thread1.run()
+while x<666:
+	imageQueue.put('lol')
 	x=x+1
 
+
+def processImage():
+ 	idleTime = time.time()
+ 	continueLoop = True
+ 	while(time.time() - idleTime < 0.1 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
+ 		if(imageQueue.qsize() > 0): #unsafe method. if another thread pops data after this line and the queue is empty program will hang.
+ 			print imageQueue.get()
+ 			print current_thread()
+ 		if(imageQueue.empty()==True):
+ 			continueLoop=False
+
+ 
+thread1 = Thread(target=processImage, args=())
+thread2 = Thread(target=processImage, args=())
+thread3 = Thread(target=processImage, args=())
+#thread4 = Thread(target=recombine, args=())
+
+thread1.start()
+thread2.start()
+thread3.start()
+#thread4.start()
+
+thread1.join()
+thread2.join()
+thread3.join()
+#thread4.join()
