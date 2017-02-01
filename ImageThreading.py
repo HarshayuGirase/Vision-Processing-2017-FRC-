@@ -1,5 +1,6 @@
 import time
 import multiprocessing
+import numpy as np
 import math
 import time
 from threading import Thread, current_thread
@@ -7,6 +8,8 @@ from Queue import Queue
 import cv2
 
 imageQueue = Queue()
+processedImages = [] #proccessed Images in form {1_1, 1_2, 2_1, 1_3...}
+numberProcessed = [] #integer of processed in form {1,1,2,1...}
 
 img = cv2.imread('./Boiler1.bmp') #image read
 width = len(img[0])
@@ -15,10 +18,29 @@ region1 = img[0:height/3, 0:width]
 region2 = img[height/3:2*height/3, 0:width]
 region3 = img[2*height/3:height, 0:width]
 
-imageQueue.put(cv2.imwrite('./1_1', region1))
-imageQueue.put(cv2.imwrite('./1_2', region2))
-imageQueue.put(cv2.imwrite('./1_3', region3))
+cv2.imwrite('./1_1.bmp', region1)
+cv2.imwrite('./1_2.bmp', region2)
+cv2.imwrite('./1_3.bmp', region3)
 
+imageQueue.put('./1_1.bmp')
+imageQueue.put('./1_2.bmp')
+imageQueue.put('./1_3.bmp')
+
+
+img = cv2.imread('./Boiler2.bmp') #image read
+width = len(img[0])
+height = sum([len(arr) for arr in img])/width
+region1 = img[0:height/3, 0:width]
+region2 = img[height/3:2*height/3, 0:width]
+region3 = img[2*height/3:height, 0:width]
+
+cv2.imwrite('./2_1.bmp', region1)
+cv2.imwrite('./2_2.bmp', region2)
+cv2.imwrite('./2_3.bmp', region3)
+
+imageQueue.put('./2_1.bmp')
+imageQueue.put('./2_2.bmp')
+imageQueue.put('./2_3.bmp')
 
 
 print imageQueue.qsize()
@@ -28,10 +50,17 @@ print imageQueue.qsize()
 def processImage():
  	idleTime = time.time()
  	continueLoop = True
- 	while(time.time() - idleTime < 0.2 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
+ 	while(time.time() - idleTime < 0.1 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
  		if(imageQueue.qsize() > 0): #unsafe method. if another thread pops data after this line and the queue is empty program will hang.
- 			print imageQueue.get()
- 			print current_thread()
+ 			filepath = imageQueue.get()
+ 			img = cv2.imread(filepath)
+ 			kernel = np.ones((3,3))
+			erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
+			dilation = cv2.dilate(erosion,kernel,iterations = 8)
+			edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
+ 			cv2.imwrite(filepath, edges)
+ 			processedImages.append(filepath)
+
  		if(imageQueue.empty()==True):
  			continueLoop=False
 
@@ -50,3 +79,5 @@ thread1.join()
 thread2.join()
 thread3.join()
 #thread4.join()
+
+print processedImages
