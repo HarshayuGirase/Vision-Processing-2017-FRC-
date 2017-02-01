@@ -45,6 +45,7 @@ imageQueue.put('./2_3.bmp')
 
 print imageQueue.qsize()
 
+start_time = time.time()
 
 #method that performs erosion, dilation, and canny on an image :D
 def processImage():
@@ -80,4 +81,5 @@ thread2.join()
 thread3.join()
 #thread4.join()
 
+print("--- %s seconds ---" % (time.time() - start_time))
 print processedImages
