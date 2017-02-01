@@ -4,21 +4,31 @@ import math
 import time
 from threading import Thread, current_thread
 from Queue import Queue
-
+import cv2
 
 imageQueue = Queue()
 
+img = cv2.imread('./Boiler1.bmp') #image read
+width = len(img[0])
+height = sum([len(arr) for arr in img])/width
+region1 = img[0:height/3, 0:width]
+region2 = img[height/3:2*height/3, 0:width]
+region3 = img[2*height/3:height, 0:width]
 
-x=0
-while x<666:
-	imageQueue.put('lol')
-	x=x+1
+imageQueue.put(cv2.imwrite('./1_1', region1))
+imageQueue.put(cv2.imwrite('./1_2', region2))
+imageQueue.put(cv2.imwrite('./1_3', region3))
 
 
+
+print imageQueue.qsize()
+
+
+#method that performs erosion, dilation, and canny on an image :D
 def processImage():
  	idleTime = time.time()
  	continueLoop = True
- 	while(time.time() - idleTime < 0.1 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
+ 	while(time.time() - idleTime < 0.2 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
  		if(imageQueue.qsize() > 0): #unsafe method. if another thread pops data after this line and the queue is empty program will hang.
  			print imageQueue.get()
  			print current_thread()
