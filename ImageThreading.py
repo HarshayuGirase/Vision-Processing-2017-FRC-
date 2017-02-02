@@ -79,7 +79,7 @@ startthread4 = time.time()
 def recombineImage():
 	idleTime = time.time()
 	currentImageIndex = 1
-	while(time.time()-startthread4 < 0.16):
+	while(time.time()-startthread4 < 1):
 		if(numberProcessed.count(currentImageIndex)==3):
 			part1 = cv2.imread('./' + str(currentImageIndex) + '_1.bmp')
 			part2 = cv2.imread('./' + str(currentImageIndex) + '_2.bmp')
@@ -92,6 +92,9 @@ def recombineImage():
  			
 			numberProcessed[:] = (value for value in numberProcessed if value != currentImageIndex) #remove all of the what is in the list  
 			currentImageIndex = currentImageIndex + 1
+			
+			if(len(numberProcessed)==0 and currentImageIndex==2):
+				print("--- %s seconds ---" % (time.time() - start_time))
 
 
 
@@ -111,7 +114,7 @@ thread2.join()
 thread3.join()
 thread4.join()
 
-print("--- %s seconds ---" % (time.time() - start_time))
+
 print processedImages
 print numberProcessed
 
