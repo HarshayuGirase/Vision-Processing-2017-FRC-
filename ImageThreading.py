@@ -83,12 +83,12 @@ def recombineImage():
 		if(numberProcessed.count(currentImageIndex)==3):
 			part1 = cv2.imread('./' + str(currentImageIndex) + '_1.bmp')
 			part2 = cv2.imread('./' + str(currentImageIndex) + '_2.bmp')
-			part3 = cv2.imread('./' + str(currentImageIndex) + '_3.bmp')
+			part3 = cv2.imread('./' + str(currentImageIndex) + '_3.bmp') 
+		
+		
+			combineOneTwo = np.concatenate((part1,part2), axis=0)
 
-			combineOneTwo = np.concatenate(part1 , part2)
-			finalImage = np.concatenate(combineOneTwo , part3)
-
-			cv2.imwrite('./' + str(currentImage) + 'final.bmp', finalImage)
+			finalImage = np.concatenate((combineOneTwo , part3), axis=0)
  			
 			numberProcessed[:] = (value for value in numberProcessed if value != currentImageIndex) #remove all of the what is in the list  
 			currentImageIndex = currentImageIndex + 1
