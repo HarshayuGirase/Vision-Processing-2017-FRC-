@@ -10,6 +10,7 @@ import cv2
 imageQueue = Queue()
 processedImages = [] #proccessed Images in form {1_1, 1_2, 2_1, 1_3...}
 numberProcessed = [] #integer of processed in form {1,1,2,1...}
+currentImageIndex = 1
 
 def addToImageQueueForTesting():
 	img = cv2.imread('./Boiler1.bmp') #image read
@@ -71,26 +72,28 @@ def processImage():
  		if(imageQueue.empty()==True):
  			continueLoop=False
 
- 
-currentImage = 1
+
+
+startthread4 = time.time()
+
 def recombineImage():
 	idleTime = time.time()
-	while(len(processedImages) > 0):
-		if(numberProcessed.count(currentImage)==3):
-			part1 = cv2.imread('./' + str(currentImage) + '_1.bmp')
-			part2 = cv2.imread('./' + str(currentImage) + '_2.bmp')
-			part3 = cv2.imread('./' + str(currentImage) + '_3.bmp')
+	currentImageIndex = 1
+	while(time.time()-startthread4 < 0.16):
+		if(numberProcessed.count(currentImageIndex)==3):
+			part1 = cv2.imread('./' + str(currentImageIndex) + '_1.bmp')
+			part2 = cv2.imread('./' + str(currentImageIndex) + '_2.bmp')
+			part3 = cv2.imread('./' + str(currentImageIndex) + '_3.bmp')
 
-			#combineOneTwo = np.concatenate(part1 , part2)
-			#finalImage = np.concatenate(combineOneTwo , part3)
+			combineOneTwo = np.concatenate(part1 , part2)
+			finalImage = np.concatenate(combineOneTwo , part3)
 
-			#cv2.imwrite('./' + str(currentImage) + 'final.bmp', finalImage)
- 			print 'hi'
-			numberProcessed[:] = (value for value in numberProcessed if value != currentImage) #remove all of the what is in the list  
-			print numberProcessed
+			cv2.imwrite('./' + str(currentImage) + 'final.bmp', finalImage)
+ 			
+			numberProcessed[:] = (value for value in numberProcessed if value != currentImageIndex) #remove all of the what is in the list  
+			currentImageIndex = currentImageIndex + 1
 
 
-	 
 
 
 thread1 = Thread(target=processImage, args=())
@@ -111,3 +114,4 @@ thread4.join()
 print("--- %s seconds ---" % (time.time() - start_time))
 print processedImages
 print numberProcessed
+
