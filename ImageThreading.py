@@ -143,3 +143,33 @@ thread4.join()
 
 
 print numberProcessed
+
+
+
+
+
+starttime2 = time.time()
+img = cv2.imread('./Boiler2.bmp') #image read
+depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
+kernel = np.ones((3,3))
+erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
+dilation = cv2.dilate(erosion,kernel,iterations = 8)
+edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
+
+img = cv2.imread('./Boiler1.bmp') #image read
+depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
+start_time = time.time()
+kernel = np.ones((3,3))
+erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
+dilation = cv2.dilate(erosion,kernel,iterations = 8)
+edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering 
+
+img = cv2.imread('./Boiler3.bmp') #image read
+depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
+start_time = time.time()
+kernel = np.ones((3,3))
+erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
+dilation = cv2.dilate(erosion,kernel,iterations = 8)
+edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
+
+print("--- %s seconds ---" % (time.time() - starttime2))
