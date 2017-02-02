@@ -78,7 +78,7 @@ start_time = time.time()
 def processImage():
  	idleTime = time.time()
  	continueLoop = True
- 	while(time.time() - idleTime < 0.1 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
+ 	while(time.time() - idleTime < 0.5 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
  		if(imageQueue.qsize() > 0): 
  			filepath = imageQueue.get()
  			img = cv2.imread(filepath)
@@ -99,6 +99,7 @@ GAME_TIME = 5 #however long you want it to run for...
 
 startthread4 = time.time()
 def recombineImage():
+	print 'started'
 	idleTime = time.time()
 	currentImageIndex = 1
 	while(time.time()-startthread4 < GAME_TIME):
