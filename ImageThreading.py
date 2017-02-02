@@ -95,7 +95,7 @@ def processImage():
 
 
 #Method that takes canny images and combines them into one
-GAME_TIME = 3 #however long you want it to run for...
+GAME_TIME = 5 #however long you want it to run for...
 
 startthread4 = time.time()
 def recombineImage():
@@ -109,7 +109,7 @@ def recombineImage():
 			part3 = cv2.imread('./' + str(currentImageIndex) + '_3.bmp') 
 			combineOneTwo = np.concatenate((part1,part2), axis=0)
 			finalImage = np.concatenate((combineOneTwo , part3), axis=0)
-			cv2.imwrite('./LatestImage.bmp', finalImage) #add this image to the file...
+			#cv2.imwrite('./LatestImage.bmp', finalImage) #add this image to the file...
  			
 			numberProcessed[:] = (value for value in numberProcessed if value != currentImageIndex) #remove all of the what is in the list  
 			
