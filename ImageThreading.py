@@ -57,12 +57,14 @@ def processImage():
  	while(time.time() - idleTime < 0.1 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
  		if(imageQueue.qsize() > 0): 
  			filepath = imageQueue.get()
+
  			img = cv2.imread(filepath)
  			kernel = np.ones((3,3))
-			erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
+			erosion = cv2.erode(img,kernel,iterations = 16)  
 			dilation = cv2.dilate(erosion,kernel,iterations = 8)
-			edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
- 			cv2.imwrite(filepath, edges)
+			edges = cv2.Canny(dilation,100,200) 
+
+ 			cv2.imwrite(filepath, edges) #overwrite that bmp that was passed as a canny version of bmp
  			processedImages.append(filepath)
  			numberProcessed.append(int(filepath[filepath.index('/')+1])) #get image number, like 1,2,3,4 etc
 
@@ -70,21 +72,41 @@ def processImage():
  			continueLoop=False
 
  
+currentImage = 1
+def recombineImage():
+	idleTime = time.time()
+	while(len(processedImages) > 0):
+		if(numberProcessed.count(currentImage)==3):
+			part1 = cv2.imread('./' + str(currentImage) + '_1.bmp')
+			part2 = cv2.imread('./' + str(currentImage) + '_2.bmp')
+			part3 = cv2.imread('./' + str(currentImage) + '_3.bmp')
+
+			#combineOneTwo = np.concatenate(part1 , part2)
+			#finalImage = np.concatenate(combineOneTwo , part3)
+
+			#cv2.imwrite('./' + str(currentImage) + 'final.bmp', finalImage)
+ 			print 'hi'
+			numberProcessed[:] = (value for value in numberProcessed if value != currentImage) #remove all of the what is in the list  
+			print numberProcessed
+
+
+	 
+
 
 thread1 = Thread(target=processImage, args=())
 thread2 = Thread(target=processImage, args=())
 thread3 = Thread(target=processImage, args=())
-#thread4 = Thread(target=recombine, args=())
+thread4 = Thread(target=recombineImage, args=())
 
 thread1.start()
 thread2.start()
 thread3.start()
-#thread4.start()
+thread4.start()
 
 thread1.join()
 thread2.join()
 thread3.join()
-#thread4.join()
+thread4.join()
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print processedImages

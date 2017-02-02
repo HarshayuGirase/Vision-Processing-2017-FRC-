@@ -102,8 +102,4 @@ def lowGoalCovered():
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
 
 	
-
-
-
-	
 lowGoalCovered()
