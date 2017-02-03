@@ -72,7 +72,6 @@ addToImageQueueForTesting()
 
 
 print imageQueue.qsize()
-start_time = time.time()
 
 #method that performs erosion, dilation, and canny on an image :D
 def processImage():
@@ -95,12 +94,12 @@ def processImage():
 
 
 #Method that takes canny images and combines them into one
-GAME_TIME = 7 #however long you want it to run for...
+GAME_TIME = 3 #however long you want it to run for...
 
-startthread4 = time.time()
+
 def recombineImage():
 	print 'started'
-	idleTime = time.time()
+	startthread4 = time.time()
 	currentImageIndex = 1
 	while(time.time()-startthread4 < GAME_TIME):
 		if(numberProcessed.count(currentImageIndex)==3):
@@ -114,7 +113,7 @@ def recombineImage():
 			numberProcessed[:] = (value for value in numberProcessed if value != currentImageIndex) #remove all of the what is in the list  
 			
 			if(len(numberProcessed)==0 and currentImageIndex==3):
-				print("--- %s seconds ---" % (time.time() - start_time))
+				print("--- %s seconds ---" % (time.time() - startthread4))
 
 			currentImageIndex = currentImageIndex + 1
 
