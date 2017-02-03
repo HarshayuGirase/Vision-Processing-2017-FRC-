@@ -103,6 +103,7 @@ def recombineImage():
 	currentImageIndex = 1
 	while(time.time()-startthread4 < GAME_TIME):
 		if(numberProcessed.count(currentImageIndex)==3):
+			print 'here'
 			part1 = cv2.imread('./' + str(currentImageIndex) + '_1.bmp')
 			part2 = cv2.imread('./' + str(currentImageIndex) + '_2.bmp')
 			part3 = cv2.imread('./' + str(currentImageIndex) + '_3.bmp') 
