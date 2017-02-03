@@ -73,7 +73,7 @@ addToImageQueueForTesting()
 
 print imageQueue.qsize()
 
-#method that performs erosion, dilation, and canny on an image :D
+#method that performs erosion, dilation, and canny on an image :Db
 def processImage():
  	idleTime = time.time()
  	continueLoop = True
