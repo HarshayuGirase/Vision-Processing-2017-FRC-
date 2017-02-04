@@ -2,7 +2,7 @@ import socket
 
 
 TCP_IP = '127.0.0.1'
-TCP_PORT = 2727
+TCP_PORT = 2728
 BUFFER_SIZE = 256
 REQUESTEDMESSAGE = 'Is Nikhil hot?'
 
