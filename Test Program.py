@@ -9,11 +9,11 @@ import cPickle
 
 img = cv2.imread('./Hopper1.bmp') #image read
 
+start = time.time()
 width = len(img[0])
 height = sum([len(arr) for arr in img])/width
 region1 = img[5*height/16:14*height/16, 0:width]
 
-start = time.time()
 img_str = cv2.imencode('.bmp', region1)[1].tostring()
 
 nparr = np.fromstring(img_str, np.uint8)
