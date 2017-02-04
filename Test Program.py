@@ -15,8 +15,8 @@ region1 = img[5*height/16:14*height/16, 0:width]
 
 start = time.time()
 img_str = cv2.imencode('.bmp', region1)[1].tostring()
+
 nparr = np.fromstring(img_str, np.uint8)
 img2 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-
 print (time.time() - start)
+
