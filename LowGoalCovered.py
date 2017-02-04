@@ -11,8 +11,8 @@ def getDistanceAngle(xCoordinate):
 	return angle
 
 def lowGoalCovered():
-	img = cv2.imread('./Boiler1.bmp') #image read
-	depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
+	img = cv2.imread('./Boiler2.bmp') #image read
+	depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
 	start_time = time.time()
 	kernel = np.ones((3,3))
 	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
