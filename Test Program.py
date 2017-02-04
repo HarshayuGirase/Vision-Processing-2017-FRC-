@@ -2,12 +2,21 @@ import json
 import cv2
 import numpy as np
 import sys
+import time
+import cPickle
 
-img = cv2.imread('./Boiler1.bmp') #image read
-img_str = cv2.imencode('.bmp', img)[1].tostring()
 
 
+img = cv2.imread('./Hopper1.bmp') #image read
+
+width = len(img[0])
+height = sum([len(arr) for arr in img])/width
+region1 = img[5*height/16:14*height/16, 0:width]
+
+start = time.time()
+img_str = cv2.imencode('.bmp', region1)[1].tostring()
 nparr = np.fromstring(img_str, np.uint8)
 img2 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-print img2
+
+print (time.time() - start)
