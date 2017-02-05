@@ -1,7 +1,7 @@
 import socket
 
 TCP_IP = socket.gethostname()
-TCP_PORT = 2774
+TCP_PORT = 2776
 BUFFER_SIZE = 256
 print TCP_IP 
 print 'lol'
