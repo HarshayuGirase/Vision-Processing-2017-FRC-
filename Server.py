@@ -1,6 +1,6 @@
 import socket
 
-TCP_IP = socket.gethostname()
+TCP_IP = '127.0.0.1'
 TCP_PORT = 2774
 BUFFER_SIZE = 256
 print TCP_IP 
