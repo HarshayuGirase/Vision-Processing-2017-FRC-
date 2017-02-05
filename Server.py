@@ -12,6 +12,7 @@ s.listen(1) #look out for 1 connection
 print 'socket listen'
 
 conn, addr = s.accept()
+print 'connection accepted'
 
 while True:
   dataRequested = conn.recv(BUFFER_SIZE)

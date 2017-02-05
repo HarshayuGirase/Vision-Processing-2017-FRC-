@@ -63,8 +63,6 @@ addToImageQueueForTesting()
 
 
 
-print 'helloooo world'
-
 
 print imageQueue.qsize()
 
