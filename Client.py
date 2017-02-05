@@ -1,26 +1,17 @@
-# import socket
+import socket
 
+TCP_IP = '127.0.0.1'
+TCP_PORT = 2772
+BUFFER_SIZE = 256
+REQUESTEDMESSAGE = 'Is Nikhil hot?'
 
-# TCP_IP = '192.168.1.3'
-# TCP_PORT = 2772
-# BUFFER_SIZE = 256
-# REQUESTEDMESSAGE = 'Is Nikhil hot?'
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((TCP_IP, TCP_PORT))
 
-# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# s.connect((TCP_IP, TCP_PORT))
+s.send(REQUESTEDMESSAGE)
+dataSentFromServer = s.recv(BUFFER_SIZE)
 
-# s.send(REQUESTEDMESSAGE)
-# dataSentFromServer = s.recv(BUFFER_SIZE)
+print dataSentFromServer
 
-# print dataSentFromServer
-
-# s.close()
-
-import socket               
-
-s = socket.socket()        
-host = '127.0.0.1'# ip of raspberry pi 
-port = 12345               
-s.connect((host, port))
-print(s.recv(1024))
 s.close()
+
