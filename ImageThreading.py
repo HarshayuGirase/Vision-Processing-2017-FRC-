@@ -10,6 +10,7 @@ import cv2
 imageQueue = Queue()
 numberProcessed = [] #integer of processed in form {1,1,2,1...}
 
+
 def addToImageQueueForTesting():
 	img = cv2.imread('./Boiler1.bmp') #image read
 	width = len(img[0])
@@ -62,13 +63,7 @@ addToImageQueueForTesting()
 
 
 
-
-
-
-
-
-
-
+print 'helloooo world'
 
 
 print imageQueue.qsize()
