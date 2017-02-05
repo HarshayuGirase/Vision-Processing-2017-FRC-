@@ -13,7 +13,7 @@ def getDistanceAngle(xCoordinate):
 def lowGoalCovered():
 	img = cv2.imread('./Boiler2.bmp') #image read
 	depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
-	start_time = time.time()
+	start_time = time.clock()
 	kernel = np.ones((3,3))
 	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
@@ -96,7 +96,7 @@ def lowGoalCovered():
 
 			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
 
-	print("--- %s seconds ---" % (time.time() - start_time))
+	print("--- %s seconds ---" % (time.clock() - start_time))
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
