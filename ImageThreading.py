@@ -10,7 +10,6 @@ import cv2
 imageQueue = Queue()
 numberProcessed = [] #integer of processed in form {1,1,2,1...}
 
-
 def addToImageQueueForTesting():
 	img = cv2.imread('./Boiler1.bmp') #image read
 	width = len(img[0])
@@ -61,16 +60,18 @@ addToImageQueueForTesting()
 
 
 
-print 'helloooo'
+
+
+
 
 
 print imageQueue.qsize()
 
 #method that performs erosion, dilation, and canny on an image :Db
 def processImage():
- 	idleTime = time.clock()
+ 	idleTime = time.time()
  	continueLoop = True
- 	while(time.clock() - idleTime < 0.5 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
+ 	while(time.time() - idleTime < 0.5 or not imageQueue.empty() and continueLoop==True): #exits after timeout unless thread still has data to process
  		if(imageQueue.qsize() > 0): 
  			filepath = imageQueue.get()
  			img = cv2.imread(filepath)
@@ -87,14 +88,14 @@ def processImage():
 
 
 #Method that takes canny images and combines them into one
-GAME_TIME = 2 #however long you want it to run for...
+GAME_TIME = 5 #however long you want it to run for...
 
 
 def recombineImage():
 	print 'started'
-	startthread4 = time.clock()
+	startthread4 = time.time()
 	currentImageIndex = 1
-	while(time.clock()-startthread4 < GAME_TIME):
+	while(time.time()-startthread4 < GAME_TIME):
 		if(numberProcessed.count(currentImageIndex)==3):
 			print 'here'
 			part1 = cv2.imread('./' + str(currentImageIndex) + '_1.bmp')
@@ -107,7 +108,7 @@ def recombineImage():
 			numberProcessed[:] = (value for value in numberProcessed if value != currentImageIndex) #remove all of the what is in the list  
 			
 			if(len(numberProcessed)==0 and currentImageIndex==3):
-				print("--- %s seconds ---" % (time.clock() - startthread4))
+				print("--- %s seconds ---" % (time.time() - startthread4))
 
 			currentImageIndex = currentImageIndex + 1
 
