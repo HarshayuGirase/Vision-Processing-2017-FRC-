@@ -87,7 +87,7 @@ def processImage():
 
 
 #Method that takes canny images and combines them into one
-GAME_TIME = 2 #however long you want it to run for...
+GAME_TIME = 7 #however long you want it to run for...
 
 
 def recombineImage():
