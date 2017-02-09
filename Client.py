@@ -5,7 +5,7 @@ import sys
 import time
 
 TCP_IP = '192.168.1.10'
-TCP_PORT = 2500
+TCP_PORT = 2502
 BUFFER_SIZE = 500
 REQUESTEDMESSAGE = 'Is Nikhil hot?'
 
@@ -35,18 +35,21 @@ imageData = ''
 print 'receiving'
 
 start_time = time.time()
-while(dataRead < (len('hi') * 1033) and time.time()-start_time < 10):
-	for i in range(len(img_str)/BUFFER_SIZE - 1):
-		s.send('hi')
+while(dataRead < (500000) and time.time()-start_time < 10):
+	for i in range(0,len(img_str)/BUFFER_SIZE - 1):
+		s.send(img_str[i*BUFFER_SIZE:(i+1)*BUFFER_SIZE])
 		imageData = imageData + s.recv(BUFFER_SIZE)
 		dataRead = len(imageData)
 		
 print 'sent'
 
-print len(imageData)
+print dataRead
 print 'exit'
 
-print imageData
+nparr = np.fromstring(imageData, np.uint8)
+img2 = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+
+cv2.imwrite('/Users/harshayugirase/Desktop/XDtest1.png', img2)
 
 
 
