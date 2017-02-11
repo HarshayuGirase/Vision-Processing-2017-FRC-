@@ -4,8 +4,8 @@ import numpy as np
 import sys
 import time
 
-TCP_IP = '192.168.1.12'
-TCP_PORT = 2389
+TCP_IP = '192.168.1.31'
+TCP_PORT = 2367
 BUFFER_SIZE = 1500
 
 
