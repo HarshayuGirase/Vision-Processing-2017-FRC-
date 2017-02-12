@@ -11,13 +11,16 @@ def getDistanceAngle(xCoordinate):
 	return angle
 
 def lowGoalCovered():
-	img = cv2.imread('./Boiler2.bmp') #image read
+	img = cv2.imread('./Boiler2.png') #image read
 	depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
 	start_time = time.clock()
 	kernel = np.ones((3,3))
-	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
+	ret,threshold = cv2.threshold(img,2,60000,cv2.THRESH_BINARY)
+	print type(img)
+	print type(threshold)
+	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
-	edges = cv2.Canny(dilation,100,200) #edge detection after some noise filtering   
+	edges = cv2.Canny(dilation,50,200) #edge detection after some noise filtering   
 
 	#cv2 version returns 2 or 3 depending on version :/
 	try:
@@ -98,8 +101,9 @@ def lowGoalCovered():
 
 	print("--- %s seconds ---" % (time.clock() - start_time))
 
-	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
-	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
+	cv2.imwrite('/Users/harshayugirase/Desktop/output.png', img)
+	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.png', edges)
+	cv2.imwrite('/Users/harshayugirase/Desktop/thresh.png', threshold)
 
 	
 lowGoalCovered()
