@@ -16,10 +16,9 @@ start_time = time.time()
 
 while (time.time() - start_time < 10):
     try:
-        data = str.encode("foo")
+        data = str.encode("SFHS Server FUCK254")
         s.sendto(data,("192.168.1.255",port))
         message, address = s.recvfrom(8192)
-        print address
     except Exception as e:
          x = 0
 
