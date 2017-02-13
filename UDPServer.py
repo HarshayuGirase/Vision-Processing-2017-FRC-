@@ -3,7 +3,7 @@ import time
 import sys
 
 host = ''                      # Bind to all interfaces
-port = 8526
+port = 7321
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
