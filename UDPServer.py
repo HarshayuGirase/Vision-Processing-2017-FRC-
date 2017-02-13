@@ -2,7 +2,7 @@ import socket, traceback
 import time
 import sys
 
-host = ''                      # Bind to all interfaces
+host = '' #bind to any interface...                     
 port = 7321
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
