@@ -5,7 +5,7 @@ import sys
 import time
 
 TCP_IP = '192.168.1.31'
-TCP_PORT = 2316
+TCP_PORT = 2317
 BUFFER_SIZE = 2000
 
 
