@@ -2,7 +2,7 @@ import socket
 import time
 
 TCP_IP = socket.gethostname()
-TCP_PORT = 2316
+TCP_PORT = 2317
 BUFFER_SIZE = 2000
 print (TCP_IP) 
 
