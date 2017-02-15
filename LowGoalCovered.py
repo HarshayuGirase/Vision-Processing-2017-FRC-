@@ -4,6 +4,13 @@ import time
 import multiprocessing
 import math
 
+img = cv2.imread('./Boiler1.png') #image read
+depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+
+img_str = cv2.imencode('.png', img)[1].tostring()
+print len(img_str)
+nparr = np.fromstring(img_str, np.uint8)
+img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
 def getDistanceAngle(xCoordinate):
 	CENTERX = 320
@@ -11,9 +18,8 @@ def getDistanceAngle(xCoordinate):
 	return angle
 
 def lowGoalCovered():
-	img = cv2.imread('./Boiler2.png') #image read
-	depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_ANYDEPTH) #mat with all depth values associated for each pixel value
 	start_time = time.clock()
+
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(img,2,60000,cv2.THRESH_BINARY)
 	print type(img)
