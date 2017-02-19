@@ -22,7 +22,7 @@ def getDistanceAngle(xCoordinate):
 	return angle
 
 def lowGoalCovered():
-	start_time = time.clock()
+	
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(img,2,60000,cv2.THRESH_BINARY)
 	print type(img)
@@ -87,7 +87,7 @@ def lowGoalCovered():
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
 
-
+	start_time = time.clock()
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
