@@ -6,7 +6,7 @@ import math
 
 img = cv2.imread('./Boiler1.png') #image read
 depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-img = cv2.cvtColor(depthMat,cv2.COLOR_GRAY2RGB)
+#img = cv2.cvtColor(depthMat,cv2.COLOR_GRAY2RGB)
 
 print depthMat[311][254]
 print img[311][252]
@@ -31,7 +31,7 @@ def lowGoalCovered():
 	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	start_time = time.clock()
-	edges = cv2.Canny(np.uint8(dilation),50,2) #edge detection after some noise filtering   
+	edges = cv2.Canny(np.uint8(dilation),2,200) #edge detection after some noise filtering   
 
 
 	#cv2 version returns 2 or 3 depending on version :/
