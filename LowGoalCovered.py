@@ -29,10 +29,10 @@ def lowGoalCovered():
 	print type(threshold)
 	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
+	start_time = time.clock()
 	edges = cv2.Canny(dilation,50,2) #edge detection after some noise filtering   
 
-	start_time = time.clock()
-	
+
 	#cv2 version returns 2 or 3 depending on version :/
 	try:
 		contours,_ = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
