@@ -111,9 +111,9 @@ def lowGoalCovered():
 
 	print("--- %s seconds ---" % (time.clock() - start_time))
 
-	cv2.imwrite('/Users/harshayugirase/Desktop/output.png', img)
-	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.png', edges)
+	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
+	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
 	cv2.imwrite('/Users/harshayugirase/Desktop/thresh.png', threshold)
 
-	
+
 lowGoalCovered()
