@@ -6,7 +6,7 @@ import time
 
 
 
-img = cv2.imread('/Users/harshayugirase/Desktop/XDtest.png') #image read
+img = cv2.imread('./Boiler1.png') #image read
 
 start_time = time.clock()
 
