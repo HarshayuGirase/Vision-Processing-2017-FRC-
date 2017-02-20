@@ -4,18 +4,17 @@ import time
 import multiprocessing
 import math
 
-img = cv2.imread('./Boiler1.png') #image read
-depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-#img = cv2.cvtColor(depthMat,cv2.COLOR_GRAY2RGB)
+
+depthMat = cv2.imread('./Boiler4.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+img = cv2.cvtColor(depthMat,cv2.COLOR_GRAY2RGB)
 
 print depthMat[311][254]
 print img[311][252]
-#print backtorgb[311][252]
 
-img_str = cv2.imencode('.png', img)[1].tostring()
-print len(img_str)
-nparr = np.fromstring(img_str, np.uint8)
-img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+# img_str = cv2.imencode('.png', img)[1].tostring()
+# print len(img_str)
+# nparr = np.fromstring(img_str, np.uint8)
+# img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
 
 def getDistanceAngle(xCoordinate):
@@ -26,12 +25,12 @@ def getDistanceAngle(xCoordinate):
 def lowGoalCovered():
 	
 	kernel = np.ones((3,3))
-	#ret,threshold = cv2.threshold(img,2,60000,cv2.THRESH_BINARY)
+	ret,threshold = cv2.threshold(np.uint8(img),2,60000,cv2.THRESH_BINARY)
 	
-	erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
+	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	start_time = time.clock()
-	edges = cv2.Canny(dilation,100,2) #edge detection after some noise filtering   
+	edges = cv2.Canny(np.uint8(dilation),100,2) #edge detection after some noise filtering   
 
 
 	#cv2 version returns 2 or 3 depending on version :/
@@ -114,7 +113,7 @@ def lowGoalCovered():
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
-	#cv2.imwrite('/Users/harshayugirase/Desktop/thresh.png', threshold)
+	cv2.imwrite('/Users/harshayugirase/Desktop/thresh.bmp', threshold)
 
-
+	
 lowGoalCovered()
