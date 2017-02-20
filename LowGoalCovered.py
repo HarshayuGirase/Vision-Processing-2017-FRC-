@@ -24,9 +24,9 @@ def getDistanceAngle(xCoordinate):
 
 def lowGoalCovered():
 	kernel = np.ones((3,3))
-	start_time = time.clock()
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
 	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
+	start_time = time.clock()
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	edges = cv2.Canny(np.uint8(dilation),100,2) #edge detection after some noise filtering   
 
