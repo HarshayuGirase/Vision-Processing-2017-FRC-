@@ -9,7 +9,7 @@ depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_UNCHANGED) #mat with all depth
 img = cv2.cvtColor(depthMat,cv2.COLOR_GRAY2RGB)
 
 print depthMat[311][254]
-print img[311][252]
+print img[311][254]
 
 # img_str = cv2.imencode('.png', img)[1].tostring()
 # print len(img_str)
