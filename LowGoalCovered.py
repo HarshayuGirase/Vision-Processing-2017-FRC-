@@ -23,7 +23,6 @@ def getDistanceAngle(xCoordinate):
 	return angle
 
 def lowGoalCovered():
-	
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
 	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
