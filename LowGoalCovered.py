@@ -5,7 +5,7 @@ import multiprocessing
 import math
 
 
-depthMat = cv2.imread('./Boiler4.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
 img = cv2.cvtColor(depthMat,cv2.COLOR_GRAY2RGB)
 
 print depthMat[311][254]
@@ -25,7 +25,7 @@ def getDistanceAngle(xCoordinate):
 def lowGoalCovered():
 	
 	kernel = np.ones((3,3))
-	ret,threshold = cv2.threshold(np.uint8(img),2,60000,cv2.THRESH_BINARY)
+	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
 	
 	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
@@ -112,8 +112,8 @@ def lowGoalCovered():
 	print("--- %s seconds ---" % (time.clock() - start_time))
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
-	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
-	cv2.imwrite('/Users/harshayugirase/Desktop/thresh.bmp', threshold)
+	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.png', edges)
+	cv2.imwrite('/Users/harshayugirase/Desktop/thresh.png', threshold)
 
 	
 lowGoalCovered()
