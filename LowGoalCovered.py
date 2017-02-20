@@ -26,7 +26,6 @@ def lowGoalCovered():
 	
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
-	
 	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	edges = cv2.Canny(np.uint8(dilation),100,2) #edge detection after some noise filtering   
@@ -93,6 +92,7 @@ def lowGoalCovered():
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
 		if(yCenterValues[i]>230 and yCenterValues[i]<320 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
+			print("--- %s seconds ---" % (time.clock() - start_time))
 			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),10,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
@@ -109,7 +109,7 @@ def lowGoalCovered():
 
 			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
 
-	print("--- %s seconds ---" % (time.clock() - start_time))
+	
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.png', edges)
