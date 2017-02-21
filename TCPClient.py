@@ -6,7 +6,7 @@ import time
 
 start_time = time.clock()
 
-TCP_IP = '192.168.1.6'
+TCP_IP = '192.168.1.5'
 TCP_PORT = 2322
 BUFFER_SIZE = 1500
 
@@ -41,4 +41,4 @@ print len(imageasstring)
 print (time.clock() - start_time)
 
 backtoarray = np.fromstring(imageasstring, np.int16).reshape(480, 640)
-#cv2.imwrite('/Users/harshayugirase/Desktop/omfg.bmp', backtoarray)
+cv2.imwrite('/Users/harshayugirase/Desktop/omfg.bmp', backtoarray)
