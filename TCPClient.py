@@ -31,7 +31,7 @@ imageasstring = ''
 count = 0
 timeout = time.clock()
 
-for i in range(0,410):
+for i in range(0,428):
 	data = s.recv(BUFFER_SIZE)
 	count = count + 1
 	imageasstring = imageasstring + data

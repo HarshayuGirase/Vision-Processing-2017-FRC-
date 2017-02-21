@@ -15,7 +15,7 @@ s.bind((TCP_IP, TCP_PORT)) #binds the socket to certain address using IP and Por
 print ('socket bind')
 
 
-depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+depthMat = cv2.imread('./Boiler4.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
 ndata = np.frombuffer(depthMat, np.int16)
 ndatastring = ndata.tostring()
 print len(ndatastring)
