@@ -6,7 +6,7 @@ import numpy as np
 start_time = time.clock()
 
 TCP_IP = ''
-TCP_PORT = 2321
+TCP_PORT = 2322
 BUFFER_SIZE = 1500
 
 
