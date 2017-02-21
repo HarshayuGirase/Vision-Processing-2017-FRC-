@@ -3,8 +3,6 @@ import numpy as np
 from cStringIO import StringIO
 import cv2
 
-depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-
 def startServer():
     port=7561
     server_socket=socket.socket() 
@@ -24,7 +22,7 @@ def startServer():
     client_connection.close()
     server_socket.close()
     print '\nframe received'
-    cv2.imwrite('./cooldawg.png', final_image)
+    cv2.imwrite('/Users/harshayugirase/Desktop/hellyeah!.bmp', final_image)
     print type(final_image)
     print 'program finished running fully!!'
 
