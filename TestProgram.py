@@ -1,4 +1,3 @@
-import json
 import cv2
 import numpy as np
 import sys
@@ -6,26 +5,12 @@ import time
 
 
 
-img = cv2.imread('./Boiler1.png') #image read
-
-start_time = time.clock()
-
-# width = len(img[0])
-# height = sum([len(arr) for arr in img])/width
-# region1 = img[5*height/16:14*height/16, 0:width]
+depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
 
 
-img_str = cv2.imencode('.png', img)[1].tostring()
-print len(img_str)
-nparr = np.fromstring(img_str, np.uint8)
-img2 = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
-print("--- %s seconds ---" % (time.clock() - start_time))
+ndata = np.frombuffer(depthMat, np.int16)
+ndatastring = ndata.tostring()
 
-print type(img_str)
-
-cv2.imwrite('/Users/harshayugirase/Desktop/XDtest1.png', img2)
-
-
-
-
+print len(ndatastring)
+backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
 

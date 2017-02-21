@@ -4,8 +4,8 @@ import numpy as np
 import sys
 import time
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 2317
+TCP_IP = '192.168.1.6'
+TCP_PORT = 2319
 BUFFER_SIZE = 1500
 
 
@@ -27,26 +27,18 @@ s.connect((TCP_IP, TCP_PORT))
 
 print 'connected'
 
+imageasstring = ''
+count = 0
+timeout = time.clock()
 
-while 1:
-    data = s.recv(BUFFER_SIZE)
-    if not data: break
-    print "received data:", data
-
-
-
-# start_time = time.time()
-# while(dataRead < (518454) and time.time()-start_time < 10):
-# 	for i in range(0,len(img_str)/BUFFER_SIZE-1):
-# 		s.send(img_str[i*BUFFER_SIZE:(i+1)*BUFFER_SIZE])
-# 		imageData = imageData + s.recv(BUFFER_SIZE)
-# 		dataRead = len(imageData)
+for i in range(0,410):
+	data = s.recv(BUFFER_SIZE)
+	count = count + 1
+	imageasstring = imageasstring + data
 		
+print count
+print len(imageasstring)
 
-print 'exit'
-
-
-
-
+#backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
 
 s.close()
