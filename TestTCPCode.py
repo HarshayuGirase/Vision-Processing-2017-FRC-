@@ -6,7 +6,7 @@ import cv2
 depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
 
 def startServer():
-    port=7560
+    port=7561
     server_socket=socket.socket() 
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
     server_socket.bind(('',port))

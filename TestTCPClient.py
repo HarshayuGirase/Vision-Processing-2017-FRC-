@@ -9,7 +9,7 @@ def startClient(server_address,image):
         return
     client_socket=socket.socket()
     client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
-    port=7560
+    port=7561
     try:
         client_socket.connect((server_address, port))
         print 'Connected to %s on port %s' % (server_address, port)
