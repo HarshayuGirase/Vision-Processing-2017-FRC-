@@ -8,11 +8,12 @@ import math
 depthMat = cv2.imread('./Boiler2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
 img = cv2.cvtColor(depthMat,cv2.COLOR_GRAY2RGB)
 
-# img_str = cv2.imencode('.png', img)[1].tostring()
-# print len(img_str)
-# nparr = np.fromstring(img_str, np.uint8)
-# img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+img_str = cv2.imencode('.png', img)[1].tostring()
+print len(img_str)
+nparr = np.fromstring(img_str, np.uint8)
+img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
+print len(img_str)
 
 def getDistanceAngle(xCoordinate):
 	CENTERX = 320
