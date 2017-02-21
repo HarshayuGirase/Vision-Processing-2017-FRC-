@@ -5,7 +5,7 @@ import sys
 import time
 
 TCP_IP = '192.168.1.5'
-TCP_PORT = 2320
+TCP_PORT = 2321
 BUFFER_SIZE = 1500
 
 
@@ -41,5 +41,5 @@ s.close()
 print count
 print len(imageasstring)
 
-backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
+backtoarray = np.fromstring(imageasstring, np.int16).reshape(480, 640)
 cv2.imwrite('/Users/harshayugirase/Desktop/omfg.bmp', backtoarray)

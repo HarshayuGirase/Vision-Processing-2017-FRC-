@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 TCP_IP = ''
-TCP_PORT = 2320
+TCP_PORT = 2321
 BUFFER_SIZE = 1500
 
 
