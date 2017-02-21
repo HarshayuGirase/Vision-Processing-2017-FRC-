@@ -21,6 +21,7 @@ def startClient(server_address,image):
     np.savez_compressed(f,frame=image)
     f.seek(0)
     out = f.read()
+    print len(out)
     client_socket.sendall(out)
     client_socket.shutdown(1)
     client_socket.close()
@@ -28,5 +29,5 @@ def startClient(server_address,image):
 
     
 
-depthMat = cv2.imread('./Boiler4.png', cv2.IMREAD_UNCHANGED)
-startClient('192.168.1.6', depthMat)
+depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED)
+startClient('127.0.0.1', depthMat)

@@ -14,7 +14,7 @@ def startServer():
     print 'connected to ',client_address[0]
     ultimate_buffer=''
     while True:
-        receiving_buffer = client_connection.recv(1024)
+        receiving_buffer = client_connection.recv(1500) #max buffer size
         if not receiving_buffer: break
         ultimate_buffer+= receiving_buffer
         print '-',
