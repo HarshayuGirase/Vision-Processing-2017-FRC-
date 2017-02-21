@@ -22,15 +22,13 @@ print len(ndatastring)
 
 
 prog_start = time.time()
-while (time.time() - prog_start  < 5):
-    s.listen(1) #look out for 1 connection
-    print ('socket listen')
-    conn, addr = s.accept()
-    print ('connection accepted')
 
-    conn.send(ndatastring)
+s.listen(1) #look out for 1 connection
+print ('socket listen')
+conn, addr = s.accept()
+print ('connection accepted')
 
-    conn.close()
-    print ('conn closed')
+conn.send(ndatastring)
 
-print ('program exited')
+conn.close()
+print ('conn closed')
