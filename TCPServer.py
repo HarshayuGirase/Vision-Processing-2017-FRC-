@@ -36,5 +36,5 @@ conn.close()
 
 
 
-print (time.time() - start_time)
+print (time.clock() - start_time)
 print ('conn closed')
