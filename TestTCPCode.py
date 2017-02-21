@@ -24,7 +24,7 @@ def startServer():
     client_connection.close()
     server_socket.close()
     print '\nframe received'
-    cv2.imwrite('./cooldawg', final_image)
+    cv2.imwrite('./cooldawg.png', final_image)
     print type(final_image)
     print 'program finished running fully!!'
 
