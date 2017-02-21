@@ -9,11 +9,6 @@ TCP_PORT = 2321
 BUFFER_SIZE = 1500
 
 
-img = cv2.imread('./Hopper1.bmp') #image read
-kernel = np.ones((3,3))
-erosion = cv2.erode(img,kernel,iterations = 16) #increase if necessary 
-dilation = cv2.dilate(erosion,kernel,iterations = 8)
-
 # width = len(img[0])
 # height = sum([len(arr) for arr in img])/width
 # region1 = dilation[5*height/16:14*height/16, 0:width] #using region1 cuts time in by like .008 seconds (like by 40%)

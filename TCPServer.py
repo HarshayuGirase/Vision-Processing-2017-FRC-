@@ -3,6 +3,8 @@ import time
 import cv2
 import numpy as np
 
+start_time = time.clock()
+
 TCP_IP = ''
 TCP_PORT = 2321
 BUFFER_SIZE = 1500
@@ -31,4 +33,8 @@ print ('connection accepted')
 conn.send(ndatastring)
 
 conn.close()
+
+
+
+print (time.time() - start_time)
 print ('conn closed')
