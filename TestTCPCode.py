@@ -4,7 +4,7 @@ from cStringIO import StringIO
 import cv2
 
 def startServer():
-    port=7561
+    port=7562
     server_socket=socket.socket() 
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
     server_socket.bind(('',port))
