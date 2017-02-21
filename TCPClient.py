@@ -4,8 +4,8 @@ import numpy as np
 import sys
 import time
 
-TCP_IP = '192.168.1.6'
-TCP_PORT = 2319
+TCP_IP = '192.168.1.5'
+TCP_PORT = 2320
 BUFFER_SIZE = 1500
 
 
@@ -35,10 +35,11 @@ for i in range(0,410):
 	data = s.recv(BUFFER_SIZE)
 	count = count + 1
 	imageasstring = imageasstring + data
-		
+
+s.close()
+
 print count
 print len(imageasstring)
 
-#backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
-
-s.close()
+backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
+cv2.imwrite('/Users/harshayugirase/Desktop/omfg.bmp', backtoarray)

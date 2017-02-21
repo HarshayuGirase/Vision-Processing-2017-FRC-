@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 TCP_IP = ''
-TCP_PORT = 2319
+TCP_PORT = 2320
 BUFFER_SIZE = 1500
 
 
@@ -22,7 +22,7 @@ print len(ndatastring)
 
 
 prog_start = time.time()
-while (time.time() - prog_start  < 7):
+while (time.time() - prog_start  < 5):
     s.listen(1) #look out for 1 connection
     print ('socket listen')
     conn, addr = s.accept()
