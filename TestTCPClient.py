@@ -33,4 +33,4 @@ def startClient(server_address,image):
     
 
 depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED)
-startClient('127.0.0.1', depthMat)
+startClient('192.168.1.6', depthMat)
