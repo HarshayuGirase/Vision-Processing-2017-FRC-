@@ -6,7 +6,7 @@ import time
 
 start_time = time.clock()
 
-TCP_IP = '192.168.1.5'
+TCP_IP = '127.0.0.1'
 TCP_PORT = 2322
 BUFFER_SIZE = 1500
 
