@@ -5,14 +5,15 @@ import multiprocessing
 import math
 
 
-depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+#depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image7.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED)
 
-ndata = np.frombuffer(depthMat, np.int16)
+ndata = np.frombuffer(depthMat, np.uint16)
 ndatastring = ndata.tostring()
-backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
+backtoarray = np.fromstring(ndatastring, np.uint16).reshape(480, 640)
 depthMat = backtoarray
 
-img = cv2.cvtColor(np.uint16(depthMat),cv2.COLOR_GRAY2RGB)
+img = cv2.cvtColor(np.uint16(backtoarray),cv2.COLOR_GRAY2RGB)
 
 def getDistanceAngle(xCoordinate):
 	CENTERX = 320
@@ -86,15 +87,17 @@ def lowGoalCovered():
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(yCenterValues[i]>230 and yCenterValues[i]<320 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
-			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),10,(239,95,255),-1) #draw the circle where center is
+		if(yCenterValues[i]>0 and yCenterValues[i]<500 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
+			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),7,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
 			print ('Contour Area is: ' + str(cv2.contourArea(FINALCONTOURS[i]))) 
 			print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
 
 			try:
-				print ('Distance to Goal is: ' + str(depthMat[xCenterValues[i]][yCenterValues[i]]/25.4) + ' inches')
+				kernel = np.ones((3,3))
+				lol = cv2.dilate(depthMat13,kernel,iterations = 3)
+				print ('Distance to Goal is: ' + str(lol[xCenterValues[i]][yCenterValues[i]]/25.4) + ' inches')
 			except:
 				try:
 					print ('Distance to Goal is: ' + str(depthMat[yCenterValues[i]][xCenterValues[i]]/25.4) + ' inches') #inverted
@@ -107,7 +110,7 @@ def lowGoalCovered():
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
-	cv2.imwrite('/Users/harshayugirase/Desktop/thresh.bmp', threshold)
+	cv2.imwrite('/Users/harshayugirase/Desktop/dilated.bmp', dilation)
 
 	
 lowGoalCovered()

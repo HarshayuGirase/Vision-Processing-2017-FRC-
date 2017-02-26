@@ -3,42 +3,52 @@ import cv2
 import numpy as np
 import sys
 import time
+import select
 
+IMAGEARRAY = []
 start_time = time.clock()
+print 'Program has started.'
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 2322
-BUFFER_SIZE = 1500
+TCP_IP = '192.168.1.37'
+TCP_PORT = 2371
+BUFFER_SIZE = 9999
 
-
-# width = len(img[0])
-# height = sum([len(arr) for arr in img])/width
-# region1 = dilation[5*height/16:14*height/16, 0:width] #using region1 cuts time in by like .008 seconds (like by 40%)
-# img_str = cv2.imencode('.bmp', region1)[1].tostring()
-
-print 'before connect'
+print 'Trying to connect...'
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
 s.connect((TCP_IP, TCP_PORT))
+s.setblocking(0)
 
-print 'connected'
-
-imageasstring = ''
+startframetime = time.time()
 count = 0
-timeout = time.clock()
+while(time.time() - startframetime < 10):
+	s.send('Gimme latest image')
+	count = count+1
+	imageasstring = ''
 
-for i in range(0,428):
-	data = s.recv(BUFFER_SIZE)
-	count = count + 1
-	imageasstring = imageasstring + data
+	while(len(imageasstring)<614400 and time.time()-startframetime<10):
+		ready = select.select([s], [], [], 0.01)
+		if ready[0]:
+			data = s.recv(BUFFER_SIZE)
+			imageasstring = imageasstring + data
 
+	print 'received image'
+	try:
+		if len(imageasstring)==614400:
+			backtoarray = np.fromstring(imageasstring, np.int16).reshape(480, 640)
+			IMAGEARRAY.append(backtoarray)
+			print count
+		else:
+			print 'fucked up'
+	except:
+		print 'fucked up2'
+	
 s.close()
-
-print count
-print len(imageasstring)
 
 print (time.clock() - start_time)
 
-backtoarray = np.fromstring(imageasstring, np.int16).reshape(480, 640)
-cv2.imwrite('/Users/harshayugirase/Desktop/omfg.bmp', backtoarray)
+for i in range(0,len(IMAGEARRAY)):
+	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/image' + str(i) + '.png', IMAGEARRAY[i])
+
+print 'Program done running :D'
