@@ -14,7 +14,7 @@ print 'Successfully bound.'
 
 start_time = time.time()
 
-while (time.time() - start_time < 10):
+while (time.time() - start_time < 30):
     try:
         data = 'SFHS Server FUCK254'
         s.sendto(data,("192.168.1.255",port))
