@@ -5,8 +5,8 @@ import multiprocessing
 import math
 
 
-depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-#depthMat = cv2.imread('./Boiler1.bmp', cv2.IMREAD_UNCHANGED)
+#depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED)
 img = cv2.cvtColor(np.uint16(depthMat),cv2.COLOR_GRAY2RGB)
 
 def getDistanceAngle(xCoordinate):
@@ -70,7 +70,7 @@ def lowGoalCovered():
 		height = sum([len(arr) for arr in edges])/width
 
 
-		if(cY<height/2):
+		if(cY>height/2):
 			if cY in yCenterValues:
 				lol = 0
 			else:
@@ -81,7 +81,7 @@ def lowGoalCovered():
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(yCenterValues[i]>0 and yCenterValues[i]<500 and cv2.contourArea(FINALCONTOURS[i])>20000): #modify contour area later
+		if(yCenterValues[i]>0 and yCenterValues[i]<500 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
 			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),7,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
