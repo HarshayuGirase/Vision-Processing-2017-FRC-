@@ -3,7 +3,7 @@ import socket, traceback, time
 SERVER_IP = ''
 
 host = '' # Bind to all interfaces
-port = 7321
+port = 7325
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

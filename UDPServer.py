@@ -3,7 +3,7 @@ import time
 import sys
 
 host = '' #bind to any interface...                     
-port = 7321
+port = 7324
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -14,10 +14,10 @@ print 'Successfully bound.'
 
 start_time = time.time()
 
-while (time.time() - start_time < 30):
+while (time.time() - start_time < 10):
     try:
         data = 'SFHS Server FUCK254'
-        s.sendto(data,("192.168.1.255",port))
+        s.sendto(data,("255.255.255.255",port))
         message, address = s.recvfrom(8192)
     except Exception as e:
          x = 0
