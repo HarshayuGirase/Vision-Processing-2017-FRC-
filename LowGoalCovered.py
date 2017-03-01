@@ -5,9 +5,12 @@ import multiprocessing
 import math
 
 
-#depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED)
-img = cv2.cvtColor(np.uint16(depthMat),cv2.COLOR_GRAY2RGB)
+depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+#depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED)
+img = cv2.cvtColor(np.uint8(depthMat),cv2.COLOR_GRAY2RGB) 
+
+depth16 = np.array(img, dtype=np.uint16) # This line only change the type, not values
+depth16 *= 256 # Now we get the good values in 16 bit format
 
 def getDistanceAngle(xCoordinate):
 	CENTERX = 320
@@ -20,7 +23,7 @@ def lowGoalCovered():
 	erosion = cv2.erode(threshold,kernel,iterations = 16) #increase if necessary 
 	dilation = cv2.dilate(erosion,kernel,iterations = 8)
 	start_time = time.clock()
-	edges = cv2.Canny(np.uint8(dilation),100,2) #edge detection after some noise filtering   
+	edges = cv2.Canny(np.uint8(dilation),4,2) #edge detection after some noise filtering   
 
 	#cv2 version returns 2 or 3 depending on version :/
 	try:
@@ -72,7 +75,7 @@ def lowGoalCovered():
 
 		if(cY>height/2):
 			if cY in yCenterValues:
-				lol = 0
+				nikhil = 'ugly'
 			else:
 				xCenterValues.append(cX)
 				yCenterValues.append(cY)
@@ -81,7 +84,7 @@ def lowGoalCovered():
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(yCenterValues[i]>0 and yCenterValues[i]<500 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
+		if(yCenterValues[i]>0 and yCenterValues[i]<400 and cv2.contourArea(FINALCONTOURS[i])>4000): #modify contour area later
 			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),7,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
@@ -89,12 +92,13 @@ def lowGoalCovered():
 			print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
 
 			try:
-				kernel = np.ones((3,3))
-				lol = cv2.dilate(depthMat13,kernel,iterations = 3)
-				print ('Distance to Goal is: ' + str(lol[xCenterValues[i]][yCenterValues[i]]/25.4) + ' inches')
+				print ('Distance to Goal is: ' + str(depthMat[xCenterValues[i]][yCenterValues[i]]/25.4) + ' inches')
+				print depthMat[xCenterValues[i]][yCenterValues[i]]/25.4/25.4
 			except:
 				try:
+					print 'broo'
 					print ('Distance to Goal is: ' + str(depthMat[yCenterValues[i]][xCenterValues[i]]/25.4) + ' inches') #inverted
+					print depth16[yCenterValues[i]][xCenterValues[i]]/25.4/25.4
 				except:
 					distance = 999999 #cannot get distance :/ 
 
