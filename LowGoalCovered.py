@@ -5,16 +5,9 @@ import multiprocessing
 import math
 
 
-depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image5.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-#depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED)
+#depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image5.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
+depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED)
 img = cv2.cvtColor(np.uint16(depthMat),cv2.COLOR_GRAY2RGB) 
-
-#TRY TO CONVERT DEPTHMAT INTO 16 BIT IMAGE
-depth16 = depthMat.astype('uint16')
-depth16 *= int(257/25.4)  # scale to full 16 bit range
-print len(depth16.tostring())
-depthMat = depth16
-#END
 
 
 def getDistanceAngle(xCoordinate):
