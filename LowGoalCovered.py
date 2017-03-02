@@ -6,11 +6,11 @@ import math
 
 
 depthMat = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image2.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-#depthMat = cv2.imread('./Boiler3.png', cv2.IMREAD_UNCHANGED)
-img = cv2.cvtColor(np.uint8(depthMat),cv2.COLOR_GRAY2RGB) 
+depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_UNCHANGED)
+depthMat = cv2.imread('./Boiler1.png', cv2.IMREAD_ANYDEPTH)
+img = cv2.cvtColor(np.uint16(depthMat),cv2.COLOR_GRAY2RGB) 
 
-depth16 = np.array(img, dtype=np.uint16) # This line only change the type, not values
-depth16 *= 256 # Now we get the good values in 16 bit format
+
 
 def getDistanceAngle(xCoordinate):
 	CENTERX = 320
@@ -93,12 +93,10 @@ def lowGoalCovered():
 
 			try:
 				print ('Distance to Goal is: ' + str(depthMat[xCenterValues[i]][yCenterValues[i]]/25.4) + ' inches')
-				print depthMat[xCenterValues[i]][yCenterValues[i]]/25.4/25.4
 			except:
 				try:
 					print 'broo'
 					print ('Distance to Goal is: ' + str(depthMat[yCenterValues[i]][xCenterValues[i]]/25.4) + ' inches') #inverted
-					print depth16[yCenterValues[i]][xCenterValues[i]]/25.4/25.4
 				except:
 					distance = 999999 #cannot get distance :/ 
 
