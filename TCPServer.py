@@ -6,7 +6,7 @@ import numpy as np
 start_time = time.clock()
 
 TCP_IP = ''
-TCP_PORT = 2322
+TCP_PORT = 2359
 BUFFER_SIZE = 1500
 
 
@@ -22,7 +22,10 @@ ndata = np.frombuffer(depthMat, np.int16)
 ndatastring = ndata.tostring()
 print len(ndatastring)
 
+backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
+print len(backtoarray.tostring())
 
+print backtoarray[286][482]/25.4
 prog_start = time.time()
 
 s.listen(1) #look out for 1 connection
