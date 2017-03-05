@@ -5,14 +5,12 @@ import multiprocessing
 import math
 
 
+#img = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image0.bmp', cv2.IMREAD_UNCHANGED)
 
-img = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image0.bmp', cv2.IMREAD_UNCHANGED)
-img = cv2.cvtColor(np.uint16(img),cv2.COLOR_GRAY2RGB) 
-
-def getDistanceAngle(xCoordinate):
-	CENTERX = 320
-	angle = (xCoordinate - 320)/10
-	return angle
+# def getDistanceAngle(xCoordinate):
+# 	CENTERX = 320
+# 	angle = (xCoordinate - 320)/10
+# 	return angle
 
 def lowGoalCovered():
 	kernel = np.ones((3,3))
@@ -24,7 +22,7 @@ def lowGoalCovered():
 
 	#cv2 version returns 2 or 3 depending on version :/
 	try:
-		contours,_ = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE) #finds all contours
+		contours,_ = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
 		contoursParent, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #finds parent contours
 	except:
 		_,contours,_ = cv2.findContours(edges.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) #finds all contours
@@ -56,21 +54,22 @@ def lowGoalCovered():
 
 
 	for c in contours: # compute the center of the contour
-		M = cv2.moments(c)
-		cX = 0
-		cY = 0
-		if(M["m00"]!=0):
-			cX = int(M["m10"] / M["m00"])
-			cY = int(M["m01"] / M["m00"])
+		if(cv2.contourArea(c,True) > 0): #avoids duplicates (only get clockwise contours)
+			M = cv2.moments(c)
+			cX = 0
+			cY = 0
+			if(M["m00"]!=0):
+				cX = int(M["m10"] / M["m00"])
+				cY = int(M["m01"] / M["m00"])
 
-		#try to find contour area of low goal and limit size of xCenterValues and yCenterValues, so that only that range will be viewed...
-		width = len(edges[0])
-		height = sum([len(arr) for arr in edges])/width
+			#try to find contour area of low goal and limit size of xCenterValues and yCenterValues, so that only that range will be viewed...
+			width = len(edges[0])
+			height = sum([len(arr) for arr in edges])/width
 
-		if(cY>height/1.75):
-			xCenterValues.append(cX)
-			yCenterValues.append(cY)
-			FINALCONTOURS.append(c)
+			if(cY>height/1.75):
+				xCenterValues.append(cX)
+				yCenterValues.append(cY)
+				FINALCONTOURS.append(c)
 
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
@@ -91,4 +90,8 @@ def lowGoalCovered():
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
 
 	
-lowGoalCovered()
+# lowGoalCovered()
+
+
+
+
