@@ -5,14 +5,15 @@ import multiprocessing
 import math
 
 
-#img = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image0.bmp', cv2.IMREAD_UNCHANGED)
+img = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image6.bmp', cv2.IMREAD_UNCHANGED)
+img = cv2.cvtColor(np.uint16(img),cv2.COLOR_GRAY2RGB)
 
 # def getDistanceAngle(xCoordinate):
 # 	CENTERX = 320
 # 	angle = (xCoordinate - 320)/10
 # 	return angle
 
-def lowGoalCovered():
+def GearVision():
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
 	erosion = cv2.erode(threshold,kernel,iterations = 5) #increase if necessary 
@@ -71,26 +72,35 @@ def lowGoalCovered():
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
 
+
+
+	targetcentersX = []
+	targetcentersY = []
+
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
 		if(yCenterValues[i]>0 and yCenterValues[i]<500 and cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<900): #modify contour area later
 			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),7,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
+			targetcentersX.append(xCenterValues[i])
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
+			targetcentersY.append(yCenterValues[i])
 			print ('Contour Area is: ' + str(cv2.contourArea(FINALCONTOURS[i]))) 
-			print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
+			#print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
 			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
+			print
 
-	#print("Y Center is: " + str(sum(yCenterValues)/len(yCenterValues)))
-	#print("X Center is: " + str(sum(xCenterValues)/len(xCenterValues)))
+	if(len(targetcentersX)==2): #if we get the retroreflective tape..
+		print("Y Center is: " + str(sum(yCenterValues)/len(yCenterValues)))
+		print("X Center is: " + str(sum(xCenterValues)/len(xCenterValues)))
 	print("--- %s seconds ---" % (time.clock() - start_time))
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output.bmp', img)
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage.bmp', edges)
+	#cv2.imwrite('/Users/harshayugirase/Desktop/threshold.bmp', threshold)
 
-	
-# lowGoalCovered()
+GearVision()
 
 
 

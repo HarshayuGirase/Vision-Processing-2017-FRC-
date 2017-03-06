@@ -26,6 +26,7 @@ def GearVision(img):
 	xCenterValues = []; yCenterValues = []
 	FINALCONTOURS = []
 
+	#next two for loops remove noise so only retroreflective targets remain
 	for i in range(0, len(contoursParent)): #essentially only keeps the children contours
 		for x in range(0, len(contours)):
 			same = True
@@ -46,7 +47,6 @@ def GearVision(img):
 				contours.pop(x)
 				x=x-1
 
-
 	for c in contours: # compute the center of the contour
 		if(cv2.contourArea(c,True) > 0): #avoids duplicates (only get clockwise contours)
 			M = cv2.moments(c)
@@ -65,25 +65,33 @@ def GearVision(img):
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
 
+
+
+
+
 	targetcentersX = []
 	targetcentersY = []
 
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<900): #modify contour area later
+		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<900): #we know the targets area must be in this range
 			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),7,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
 			targetcentersY.append(yCenterValues[i])
 			print ('Contour Area is: ' + str(cv2.contourArea(FINALCONTOURS[i]))) 
-			#print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
 			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
+			print
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output1.bmp', img)
 	cv2.imwrite('/Users/harshayugirase/Desktop/cannyimage1.bmp', edges)
-	return (targetcentersX, targetcentersY)
+
+	if(len(targetcentersX)==2):
+		return (targetcentersX, targetcentersY)
+	else
+		return (69,69)
 	
 	
 
@@ -135,8 +143,7 @@ try:
 				try:
 					centersTuple = GearVision(backtoarray)
 				except:
-					nikhil = 'gay'
-					print 'lmfao'
+					haha = 0
 				COLORIMAGEARRAY.append(backtoarray)
 				print count
 			else:
@@ -145,48 +152,54 @@ try:
 			print ex
 
 
+		if(centersTuple[0]!=69 and centersTuple[1]!=69):
+			s.send('depth image')
+			depthimagestring = ''
+			while(len(depthimagestring)<HEIGHT*WIDTH*2 and time.time() - startframetime < RUNTIME):
+				ready = select.select([s], [], [], 0.01)
+				if ready[0]:
+					data = s.recv(BUFFER_SIZE)
+					depthimagestring = depthimagestring + data
 
+			print 'received depth image'
+			print len(depthimagestring)
+			try:
+				if len(depthimagestring)==HEIGHT*WIDTH*2:
+					nparr = np.fromstring(depthimagestring, np.uint16).reshape(480,640)
+					DEPTHIMAGEARRAY.append(nparr)
+					contourxval = centersTuple[0]
+					contouryval = centersTuple[1]
+					print contourxval[0]
+					print contouryval[0]
+					print 'Depth at target 1 PLZ WORK: ' + str(nparr[contourxval[0]][contouryval[0]])
+					print count
+				else:
+					print 'fucked up'
+			except Exception as ex:
+				print ex
 
-
-		s.send('depth image')
-		depthimagestring = ''
-		while(len(depthimagestring)<HEIGHT*WIDTH*2 and time.time() - startframetime < RUNTIME):
-			ready = select.select([s], [], [], 0.01)
-			if ready[0]:
-				data = s.recv(BUFFER_SIZE)
-				depthimagestring = depthimagestring + data
-
-		print 'received depth image'
-		print len(depthimagestring)
-		try:
-			if len(depthimagestring)==HEIGHT*WIDTH*2:
-				nparr = np.fromstring(depthimagestring, np.uint16).reshape(480,640)
-				DEPTHIMAGEARRAY.append(nparr)
-				contourxval = centersTuple[0]
-				contouryval = centersTuple[1]
-				print contourxval[0]
-				print contouryval[0]
-				print 'Depth at contour 1 PLZ WORK: ' + str(nparr[contourxval[0]][contouryval[0]])
-				print count
-			else:
-				print 'fucked up'
-		except Exception as ex:
-			print ex
-
-except:
-	nikhil = 'hawt'
+except Exception as ex:
+	print ex
 	
+
+
+
+
+
+
+
+
 
 s.close()
 
 print (time.clock() - start_time)
 
 for i in range(0,len(COLORIMAGEARRAY)):
-	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/image' + str(i) + '.bmp', COLORIMAGEARRAY[i])
+	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/colorimage' + str(i) + '.bmp', COLORIMAGEARRAY[i])
 
 for w in range(0,len(DEPTHIMAGEARRAY)-1):
-	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/sixteen' + str(w) + '.bmp', DEPTHIMAGEARRAY[i])
+	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/depthimage' + str(w) + '.bmp', DEPTHIMAGEARRAY[i])
 
-print len(COLORIMAGEARRAY)
-print len(DEPTHIMAGEARRAY)
+print 
+print
 print 'Program done running :D'
