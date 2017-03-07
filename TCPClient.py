@@ -161,22 +161,22 @@ try:
 					data = s.recv(BUFFER_SIZE)
 					depthimagestring = depthimagestring + data
 
-			print 'received depth image'
+			print 'received depth image...which means two targets were found yeehaw now uncomment vv'
 			print len(depthimagestring)
-			try:
-				if len(depthimagestring)==HEIGHT*WIDTH*2:
-					nparr = np.fromstring(depthimagestring, np.uint16).reshape(480,640)
-					DEPTHIMAGEARRAY.append(nparr)
-					contourxval = centersTuple[0]
-					contouryval = centersTuple[1]
-					print contourxval[0]
-					print contouryval[0]
-					print 'Depth at target 1 PLZ WORK: ' + str(nparr[contourxval[0]][contouryval[0]])
-					print count
-				else:
-					print 'fucked up'
-			except Exception as ex:
-				print ex
+			# try:
+			# 	if len(depthimagestring)==HEIGHT*WIDTH*2:
+			# 		nparr = np.fromstring(depthimagestring, np.uint16).reshape(480,640)
+			# 		DEPTHIMAGEARRAY.append(nparr)
+			# 		contourxval = centersTuple[0]
+			# 		contouryval = centersTuple[1]
+			# 		print contourxval[0]
+			# 		print contouryval[0]
+			# 		print 'Depth at target 1 PLZ WORK: ' + str(nparr[contourxval[0]][contouryval[0]])
+			# 		print count
+			# 	else:
+			# 		print 'fucked up'
+			# except Exception as ex:
+			# 	print ex
 
 except Exception as ex:
 	print ex

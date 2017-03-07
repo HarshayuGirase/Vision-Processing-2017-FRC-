@@ -8,10 +8,18 @@ import math
 img = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image6.bmp', cv2.IMREAD_UNCHANGED)
 img = cv2.cvtColor(np.uint16(img),cv2.COLOR_GRAY2RGB)
 
-# def getDistanceAngle(xCoordinate):
-# 	CENTERX = 320
-# 	angle = (xCoordinate - 320)/10
-# 	return angle
+def getDistanceAngle(xCoordinate):
+ 	CENTERX = 320
+ 	angle = (xCoordinate - 320)/10
+ 	return angle
+
+def getAngle(depthT1,depthT2):
+ 	yComponent = depthT2 - depthT1
+ 	xComponent = 209.55 #millimeter distance between two centers
+ 	degrees = math.degrees(math.atan2(yComponent, xComponent))
+ 	return degrees
+
+print getAngle(100,110)
 
 def GearVision():
 	kernel = np.ones((3,3))
@@ -87,7 +95,7 @@ def GearVision():
 			print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
 			targetcentersY.append(yCenterValues[i])
 			print ('Contour Area is: ' + str(cv2.contourArea(FINALCONTOURS[i]))) 
-			#print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
+			print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
 			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
 			print
 
