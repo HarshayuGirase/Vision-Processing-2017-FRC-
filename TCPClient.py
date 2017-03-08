@@ -180,7 +180,7 @@ try:
 			print len(depthimagestring)
 			try:
 				if len(depthimagestring)==HEIGHT*WIDTH*2:
-					nparr = np.fromstring(depthimagestring, np.uint16).reshape(480,640)
+					nparr = np.fromstring(depthimagestring, np.uint16).reshape(480,640) #don't reshape!!
 					DEPTHIMAGEARRAY.append(nparr)
 					depth1 = (nparr[centersTuple[1][0]][centersTuple[0][0]-40])
 					depth2 = (nparr[centersTuple[1][1]][centersTuple[0][1]-40])
