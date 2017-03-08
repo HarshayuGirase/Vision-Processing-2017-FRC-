@@ -8,8 +8,7 @@ import math
 import random
 
 def getAngle(depthT1,depthT2):
- 	yComponent = depthT1 - depthT2
- 	print yComponent
+ 	yComponent = depthT2 - depthT1
  	xComponent = 209.55 #millimeter distance between two centers
  	degrees = math.degrees(math.atan2(yComponent, xComponent))
  	return degrees
