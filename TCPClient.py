@@ -7,6 +7,18 @@ import select
 import math
 import random
 
+host = '' #bind to any interface...                     
+port = 7327
+
+udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+udps.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+udps.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+udps.bind((host, port))
+
+udps.send('lololol')
+
+
+
 def getAngle(depthT1,depthT2):
  	yComponent = depthT2 - depthT1
  	xComponent = 209.55 #millimeter distance between two centers
@@ -72,12 +84,10 @@ def GearVision(img):
 			width = len(edges[0])
 			height = sum([len(arr) for arr in edges])/width
 
-			if(cY<HEIGHT/2 and cY>HEIGHT/3):
+			if(cY<HEIGHT - HEIGHT/4 and cY>HEIGHT/4):
 				xCenterValues.append(cX)
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
-
-
 
 
 
@@ -87,7 +97,7 @@ def GearVision(img):
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(cv2.contourArea(FINALCONTOURS[i])>400 and cv2.contourArea(FINALCONTOURS[i])<1400): #we know the targets area must be in this range
+		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<900): #we know the targets area must be in this range
 			cv2.circle(edges,(xCenterValues[i],yCenterValues[i]),5,(239,95,255),-1) #draw the circle where center is
 			#print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
@@ -114,7 +124,7 @@ def GearVision(img):
 HEIGHT = 480
 WIDTH = 640
 
-RUNTIME = 5 #seconds of how long program should run
+RUNTIME = 10 #seconds of how long program should run
 
 COLORIMAGEARRAY = []
 DEPTHIMAGEARRAY = []
@@ -131,7 +141,6 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
 s.connect((TCP_IP, TCP_PORT))
 s.setblocking(0)
-
 
 try:
 	startframetime = time.time()
@@ -183,7 +192,7 @@ try:
 					print 'Angle is::::::: ' + str(getDistanceAngle((centersTuple[0][0] + centersTuple[0][1])/2))
 					centerX = (centersTuple[0][0] + centersTuple[0][1])/2
 					centerY = (centersTuple[1][0] + centersTuple[1][1])/2
-					print (nparr[WIDTH*centerY + centerX] / 25.4) + 3 #depth to the goal (system error of 3 inches)
+					print (nparr[WIDTH*centerY + centerX] / 25.4) #depth 
 					depth1 = nparr[WIDTH*(centersTuple[1][0]+30) + centersTuple[0][0]]
 					depth2 = nparr[WIDTH*(centersTuple[1][1]+30) + centersTuple[0][1]]
 					print depth1
@@ -200,12 +209,8 @@ except Exception as ex:
 	
 
 
-
-
-
-
-
 s.close()
+udps.close()
 
 print (time.clock() - start_time)
 
@@ -215,7 +220,6 @@ for i in range(0,len(COLORIMAGEARRAY)):
 
 #for w in range(0,len(DEPTHIMAGEARRAY)):
  	#cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/depthimage' + str(w) + '.bmp', DEPTHIMAGEARRAY[w])
-
-print 
+ 
 print
 print 'Program done running :D'
