@@ -3,7 +3,7 @@ import time
 import sys
 
 host = '' #bind to any interface...                     
-port = 7327
+port = 2444
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -12,16 +12,13 @@ s.bind((host, port))
 
 print 'Successfully bound.'
 
-start_time = time.time()
+start_time = time.clock()
 
-while (time.time() - start_time < 10):
+while (time.clock() - start_time < 5):
     try:
-        data = 'SFHS Server FUCK254'
-        s.sendto(data,("192.168.1.255",port))
-        message, address = s.recvfrom(8192)
+        s.sendto("testhohiop",("10.23.67.255",port))
     except Exception as e:
          x = 0
-
 
 print 'done'
 

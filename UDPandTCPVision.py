@@ -8,15 +8,12 @@ import math
 import random
 
 host = '' #bind to any interface...                     
-port = 7327
+udpport = 2393
 
 udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udps.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 udps.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-udps.bind((host, port))
-
-udps.send('lololol')
-
+udps.bind((host, udpport))
 
 
 def getAngle(depthT1,depthT2):
@@ -33,8 +30,8 @@ def getDistanceAngle(xCoordinate):
 def GearVision(img):
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
-	erosion = cv2.erode(threshold,kernel,iterations = 5) #increase if necessary 
-	dilation = cv2.dilate(erosion,kernel,iterations = 5)
+	erosion = cv2.erode(threshold,kernel,iterations = 4) #increase if necessary 
+	dilation = cv2.dilate(erosion,kernel,iterations = 4)
 	start_time = time.clock()
 	edges = cv2.Canny(np.uint8(dilation),4,2) #edge detection after some noise filtering   
 
@@ -84,7 +81,8 @@ def GearVision(img):
 			width = len(edges[0])
 			height = sum([len(arr) for arr in edges])/width
 
-			if(cY<HEIGHT - HEIGHT/4 and cY>HEIGHT/4):
+			if(cY<HEIGHT - 1*HEIGHT/5 and cY>HEIGHT/4): #LITERALLY CHANGE
+		
 				xCenterValues.append(cX)
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
@@ -97,7 +95,7 @@ def GearVision(img):
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<900): #we know the targets area must be in this range
+		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<2900): #we know the targets area must be in this range
 			cv2.circle(edges,(xCenterValues[i],yCenterValues[i]),5,(239,95,255),-1) #draw the circle where center is
 			#print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
@@ -106,7 +104,7 @@ def GearVision(img):
 			print ('Contour Area is: ' + str(cv2.contourArea(FINALCONTOURS[i]))) 
 			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
 	
-	print len(xCenterValues)
+	print len(targetcentersX)
 	print
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output1.bmp', img)
@@ -159,7 +157,6 @@ try:
 				colorimagestring = colorimagestring + data
 
 		print 'received color image'
-		print len(colorimagestring)
 		try:
 			if len(colorimagestring)==HEIGHT*WIDTH:
 				backtoarray = np.fromstring(colorimagestring, dtype=np.uint8).reshape(480,640)
@@ -185,19 +182,20 @@ try:
 					depthimagestring = depthimagestring + data
 
 			print 'received depth image...'
-			print len(depthimagestring)
 			try:
 				if len(depthimagestring)==HEIGHT*WIDTH*2:
 					nparr = np.fromstring(depthimagestring, np.uint16) #don't reshape!!
-					print 'Angle is::::::: ' + str(getDistanceAngle((centersTuple[0][0] + centersTuple[0][1])/2))
+					angle = getDistanceAngle((centersTuple[0][0] + centersTuple[0][1])/2)
+					udps.sendto("SFHS:" + str(angle),("10.23.67.255",udpport))
+					print 'Angle is::::::: ' + str(angle)
+
 					centerX = (centersTuple[0][0] + centersTuple[0][1])/2
 					centerY = (centersTuple[1][0] + centersTuple[1][1])/2
-					print (nparr[WIDTH*centerY + centerX] / 25.4) #depth 
-					depth1 = nparr[WIDTH*(centersTuple[1][0]+30) + centersTuple[0][0]]
-					depth2 = nparr[WIDTH*(centersTuple[1][1]+30) + centersTuple[0][1]]
-					print depth1
-					print depth2
-					print 'Pogace Angle is::::::: ' + str(getAngle(int(depth1),int(depth2)))
+					print 'Depth to peg is: ' + str((nparr[WIDTH*centerY + centerX] / 25.4)) #depth 
+					#depth1 = nparr[WIDTH*(centersTuple[1][0]-50) + centersTuple[0][0]]
+					#depth2 = nparr[WIDTH*(centersTuple[1][1]-50) + centersTuple[0][1]]
+					#print 'Pogace Angle is::::::: ' + str(getAngle(int(depth1),int(depth2)))
+
 					print count
 				else:
 					print 'fucked up'
@@ -207,7 +205,6 @@ try:
 except Exception as ex:
 	print ex
 	
-
 
 s.close()
 udps.close()

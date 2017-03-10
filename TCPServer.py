@@ -7,8 +7,7 @@ start_time = time.clock()
 
 TCP_IP = ''
 TCP_PORT = 2359
-BUFFER_SIZE = 1500
-
+BUFFER_SIZE = 9999
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #creates the socket
 print ('socket created')
@@ -16,27 +15,15 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
 s.bind((TCP_IP, TCP_PORT)) #binds the socket to certain address using IP and Port#
 print ('socket bind')
 
-
-depthMat = cv2.imread('./Boiler4.png', cv2.IMREAD_UNCHANGED) #mat with all depth values associated for each pixel value
-ndata = np.frombuffer(depthMat, np.int16)
-ndatastring = ndata.tostring()
-print len(ndatastring)
-
-backtoarray = np.fromstring(ndatastring, np.int16).reshape(480, 640)
-print len(backtoarray.tostring())
-
-print backtoarray[286][482]/25.4
-prog_start = time.time()
-
 s.listen(1) #look out for 1 connection
 print ('socket listen')
 conn, addr = s.accept()
 print ('connection accepted')
 
-conn.send(ndatastring)
+conn.send('nikhils a fucking bastard pussy ass STD carrier')
 
 conn.close()
-
+s.close()
 
 
 print (time.clock() - start_time)

@@ -1,2 +1,0 @@
-Goal Distance: 12 degrees
-Angle: ~86 inches 
