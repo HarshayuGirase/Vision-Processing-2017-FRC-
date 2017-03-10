@@ -16,7 +16,7 @@ start_time = time.clock()
 
 while (time.clock() - start_time < 5):
     try:
-        s.sendto("testhohiop",("10.23.67.255",port))
+        s.sendto("nikhils a fucking bastard pussy ass STD carrier",("10.23.67.255",port))
     except Exception as e:
          x = 0
 
