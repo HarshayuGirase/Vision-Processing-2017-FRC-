@@ -85,7 +85,7 @@ def GearVision(img):
 			#if(cY<HEIGHT - 1*HEIGHT/5 and cY>HEIGHT/4): #LITERALLY CHANGE
 			x,y,w,h = cv2.boundingRect(c)
 			#print h/w
-			if(h / w == 2):
+			if(h / w >= 2):
 				xCenterValues.append(cX)
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
@@ -97,7 +97,7 @@ def GearVision(img):
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(cv2.contourArea(FINALCONTOURS[i])>400 and cv2.contourArea(FINALCONTOURS[i])<7000): #we know the targets area must be in this range
+		if(cv2.contourArea(FINALCONTOURS[i])>200 and cv2.contourArea(FINALCONTOURS[i])<4000): #we know the targets area must be in this range
 			cv2.circle(edges,(xCenterValues[i],yCenterValues[i]),5,(239,95,255),-1) #draw the circle where center is
 			#print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
@@ -158,7 +158,6 @@ try:
 	while(time.time() - startframetime < RUNTIME):
 
 		centersTuple = ()
-
 		s.send('color image')
 		count = count+1
 		colorimagestring = ''
@@ -169,6 +168,7 @@ try:
 				colorimagestring = colorimagestring + data
 
 		print 'received color image'
+
 		try:
 			if len(colorimagestring)==HEIGHT*WIDTH:
 				backtoarray = np.fromstring(colorimagestring, dtype=np.uint8).reshape(480,640)
