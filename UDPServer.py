@@ -14,11 +14,15 @@ print 'Successfully bound.'
 
 start_time = time.clock()
 
-while (time.clock() - start_time < 5):
-    try:
-        s.sendto("nikhils a fucking bastard pussy ass STD carrier",("10.23.67.255",port))
-    except Exception as e:
-         x = 0
+s.sendto("SFHS:+32:71",("10.23.67.255",port))
+s.sendto("SFHS:-69:69",("10.23.67.255",port))
+#s.sendto("ccc",("10.23.67.255",port))
+
+#s.sendto("ddd",("10.23.67.255",port))
+#s.sendto("eee",("10.23.67.255",port))
+##s.sendto("fff",("10.23.67.255",port))
+#s.sendto("ggg",("10.23.67.255",port))
+
 
 print 'done'
 

@@ -5,7 +5,7 @@ import multiprocessing
 import math
 
 
-img = cv2.imread('/Users/harshayugirase/Desktop/LiveFeed/image6.bmp', cv2.IMREAD_UNCHANGED)
+img = cv2.imread('/Users/harshayugirase/Desktop/output1.bmp', cv2.IMREAD_UNCHANGED)
 img = cv2.cvtColor(np.uint16(img),cv2.COLOR_GRAY2RGB)
 
 def getDistanceAngle(xCoordinate):
@@ -19,7 +19,6 @@ def getAngle(depthT1,depthT2):
  	degrees = math.degrees(math.atan2(yComponent, xComponent))
  	return degrees
 
-print getAngle(100,110)
 
 def GearVision():
 	kernel = np.ones((3,3))
@@ -40,7 +39,7 @@ def GearVision():
 
 	xCenterValues = []; yCenterValues = []
 	FINALCONTOURS = []
-
+	
 	for i in range(0, len(contoursParent)): #essentially only keeps the children contours
 		for x in range(0, len(contours)):
 			same = True
@@ -63,7 +62,7 @@ def GearVision():
 
 
 	for c in contours: # compute the center of the contour
-		if(cv2.contourArea(c,True) > 0): #avoids duplicates (only get clockwise contours)
+		if(True): #avoids duplicates (only get clockwise contours)
 			M = cv2.moments(c)
 			cX = 0
 			cY = 0
@@ -75,12 +74,13 @@ def GearVision():
 			width = len(edges[0])
 			height = sum([len(arr) for arr in edges])/width
 
-			if(cY>height/1.75):
-				xCenterValues.append(cX)
-				yCenterValues.append(cY)
-				FINALCONTOURS.append(c)
+			
+			xCenterValues.append(cX)
+			yCenterValues.append(cY)
+			FINALCONTOURS.append(c)
 
-
+	for i in range(0,len(FINALCONTOURS)):
+		cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
 
 	targetcentersX = []
 	targetcentersY = []
@@ -88,7 +88,7 @@ def GearVision():
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(yCenterValues[i]>0 and yCenterValues[i]<500 and cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<900): #modify contour area later
+		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<15000): #modify contour area later
 			cv2.circle(img,(xCenterValues[i],yCenterValues[i]),7,(239,95,255),-1) #draw the circle where center is
 			print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
@@ -96,8 +96,8 @@ def GearVision():
 			targetcentersY.append(yCenterValues[i])
 			print ('Contour Area is: ' + str(cv2.contourArea(FINALCONTOURS[i]))) 
 			print ('Angle to goal: ' + str(getDistanceAngle(xCenterValues[i])))
-			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
-			print
+		#	cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
+			
 
 	if(len(targetcentersX)==2): #if we get the retroreflective tape..
 		print("Y Center is: " + str(sum(yCenterValues)/len(yCenterValues)))

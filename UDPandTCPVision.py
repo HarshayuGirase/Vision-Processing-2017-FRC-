@@ -6,9 +6,10 @@ import time
 import select
 import math
 import random
+import PIL
 
 host = '' #bind to any interface...                     
-udpport = 2393
+udpport = 2405
 
 udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udps.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -30,8 +31,8 @@ def getDistanceAngle(xCoordinate):
 def GearVision(img):
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
-	erosion = cv2.erode(threshold,kernel,iterations = 4) #increase if necessary 
-	dilation = cv2.dilate(erosion,kernel,iterations = 4)
+	erosion = cv2.erode(threshold,kernel,iterations = 2) #increase if necessary 
+	dilation = cv2.dilate(erosion,kernel,iterations = 1)
 	start_time = time.clock()
 	edges = cv2.Canny(np.uint8(dilation),4,2) #edge detection after some noise filtering   
 
@@ -81,12 +82,13 @@ def GearVision(img):
 			width = len(edges[0])
 			height = sum([len(arr) for arr in edges])/width
 
-			if(cY<HEIGHT - 1*HEIGHT/5 and cY>HEIGHT/4): #LITERALLY CHANGE
-		
+			#if(cY<HEIGHT - 1*HEIGHT/5 and cY>HEIGHT/4): #LITERALLY CHANGE
+			x,y,w,h = cv2.boundingRect(c)
+			#print h/w
+			if(h / w == 2):
 				xCenterValues.append(cX)
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
-
 
 
 	targetcentersX = []
@@ -95,16 +97,16 @@ def GearVision(img):
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<2900): #we know the targets area must be in this range
+		if(cv2.contourArea(FINALCONTOURS[i])>400 and cv2.contourArea(FINALCONTOURS[i])<7000): #we know the targets area must be in this range
 			cv2.circle(edges,(xCenterValues[i],yCenterValues[i]),5,(239,95,255),-1) #draw the circle where center is
 			#print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
-			#print ('Y Center is: ' + str(yCenterValues[i])) #calculate the y value of the center...
+			#print ('Y Center is: ' + str(yCenterValues[i]b)) #calculate the y value of the center...
 			targetcentersY.append(yCenterValues[i])
 			print ('Contour Area is: ' + str(cv2.contourArea(FINALCONTOURS[i]))) 
 			cv2.drawContours(img,FINALCONTOURS,i,(0,255,0),3) #draw the contour
 	
-	print len(targetcentersX)
+	print 'Targets detected: ' + str(len(targetcentersX))
 	print
 
 	cv2.imwrite('/Users/harshayugirase/Desktop/output1.bmp', img)
@@ -122,23 +124,33 @@ def GearVision(img):
 HEIGHT = 480
 WIDTH = 640
 
-RUNTIME = 10 #seconds of how long program should run
+RUNTIME = 60 #seconds of how long program should run
 
 COLORIMAGEARRAY = []
 DEPTHIMAGEARRAY = []
 start_time = time.clock()
 print 'Program has started.'
 
-TCP_IP = '10.23.67.71'
-TCP_PORT = 2373
+#TCP_IP = '10.23.67.71'
+TCP_IP = '192.168.1.2'
+TCP_PORT = 2374
 BUFFER_SIZE = 9999
 
 print 'Trying to connect...'
+hasConnectedToPogace = False
+timeouttoconnect = time.time()
+while(hasConnectedToPogace==False and time.time()-timeouttoconnect<120): #try connecting to pogace for 120 seconds...
+	try:
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
+		s.connect((TCP_IP, TCP_PORT))
+		s.setblocking(0)
+		hasConnectedToPogace = True
+	except:
+		hasConnectedToPogace = False
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #so it can be recreated
-s.connect((TCP_IP, TCP_PORT))
-s.setblocking(0)
+#in form hbound, sbound, vbound
+s.send('change hsv;83;255;50;255;240;255!')
 
 try:
 	startframetime = time.time()
@@ -163,7 +175,7 @@ try:
 				try:
 					centersTuple = GearVision(backtoarray)
 				except:
-					haha = 0
+					fuckme = 0
 				COLORIMAGEARRAY.append(backtoarray)
 				print count
 			else:
@@ -171,36 +183,41 @@ try:
 		except Exception as ex:
 			print ex
 
-
 		if(centersTuple[0]!=69 and centersTuple[1]!=69):
-			s.send('depth image')
-			depthimagestring = ''
-			while(len(depthimagestring)<HEIGHT*WIDTH*2 and time.time() - startframetime < RUNTIME):
-				ready = select.select([s], [], [], 0.01)
-				if ready[0]:
-					data = s.recv(BUFFER_SIZE)
-					depthimagestring = depthimagestring + data
+			angle = getDistanceAngle(sum(centersTuple[0])/len(centersTuple[0]))
+			angle = angle + 1
+			udps.sendto(str(angle),("10.23.67.255",udpport))
+			print 'Angle is::::::: ' + str(angle)
 
-			print 'received depth image...'
-			try:
-				if len(depthimagestring)==HEIGHT*WIDTH*2:
-					nparr = np.fromstring(depthimagestring, np.uint16) #don't reshape!!
-					angle = getDistanceAngle((centersTuple[0][0] + centersTuple[0][1])/2)
-					udps.sendto("SFHS:" + str(angle),("10.23.67.255",udpport))
-					print 'Angle is::::::: ' + str(angle)
+		# #THIS FOLLOWING CODE SEGMENT IS FOR DEPTH... but i don't want depth right now....
+		# if(centersTuple[0]!=69 and centersTuple[1]!=69 and 11==12):
+		# 	s.send('depth image')
+		# 	depthimagestring = ''
+		# 	while(len(depthimagestring)<HEIGHT*WIDTH*2 and time.time() - startframetime < RUNTIME):
+		# 		ready = select.select([s], [], [], 0.01)
+		# 		if ready[0]:
+		# 			data = s.recv(BUFFER_SIZE)
+		# 			depthimagestring = depthimagestring + data
+		# 	print 'received depth image...'
+		# 	try:
+		# 		if len(depthimagestring)==HEIGHT*WIDTH*2:
+		# 			nparr = np.fromstring(depthimagestring, dtype=np.uint16) #don't reshape!!
+	
+		# 			centerX = sum(centersTuple[0])/len(centersTuple[0])
+		# 			centerY = sum(centersTuple[1])/len(centersTuple[1])
+		# 			print "depth should be " + str(nparr[ (WIDTH * (centerY+50)) + centerX] / 25.4)
 
-					centerX = (centersTuple[0][0] + centersTuple[0][1])/2
-					centerY = (centersTuple[1][0] + centersTuple[1][1])/2
-					print 'Depth to peg is: ' + str((nparr[WIDTH*centerY + centerX] / 25.4)) #depth 
-					#depth1 = nparr[WIDTH*(centersTuple[1][0]-50) + centersTuple[0][0]]
-					#depth2 = nparr[WIDTH*(centersTuple[1][1]-50) + centersTuple[0][1]]
-					#print 'Pogace Angle is::::::: ' + str(getAngle(int(depth1),int(depth2)))
-
-					print count
-				else:
-					print 'fucked up'
-			except Exception as ex:
-				print ex
+		# 			file = open('./depthvalues.txt', 'w')
+		# 			file.write(nparr)
+		# 			file.close()
+		# 			#depth1 = nparr[WIDTH*(centersTuple[1][0]-50) + centersTuple[0][0]]
+		# 			#depth2 = nparr[WIDTH*(centersTuple[1][1]-50) + centersTuple[0][1]]
+		# 			#print 'Pogace Angle is::::::: ' + str(getAngle(int(depth1),int(depth2)))
+		# 			print count
+		# 		else:
+		# 			print 'fucked up'
+		# 	except Exception as ex:
+		# 		print ex
 
 except Exception as ex:
 	print ex
@@ -209,14 +226,15 @@ except Exception as ex:
 s.close()
 udps.close()
 
-print (time.clock() - start_time)
 
+
+print (time.clock() - start_time)
 for i in range(0,len(COLORIMAGEARRAY)):
 	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/colorimage' + str(i) + '.bmp', COLORIMAGEARRAY[i])
 
 
-#for w in range(0,len(DEPTHIMAGEARRAY)):
- 	#cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/depthimage' + str(w) + '.bmp', DEPTHIMAGEARRAY[w])
+for w in range(0,len(DEPTHIMAGEARRAY)):
+ 	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/depthimage' + str(w) + '.bmp', DEPTHIMAGEARRAY[w])
  
 print
 print 'Program done running :D'
