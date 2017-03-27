@@ -226,7 +226,7 @@ try:
 except Exception as ex:
 	print ex
 	
-
+s.send('end')
 s.close()
 udps.close()
 
