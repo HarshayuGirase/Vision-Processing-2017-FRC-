@@ -31,8 +31,8 @@ def getDistanceAngle(xCoordinate):
 def GearVision(img):
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
-	erosion = cv2.erode(threshold,kernel,iterations = 2) #increase if necessary 
-	dilation = cv2.dilate(erosion,kernel,iterations = 1)
+	erosion = cv2.erode(threshold,kernel,iterations = 6) #increase if necessary 
+	dilation = cv2.dilate(erosion,kernel,iterations = 5)
 	start_time = time.clock()
 	edges = cv2.Canny(np.uint8(dilation),4,2) #edge detection after some noise filtering   
 
@@ -84,8 +84,9 @@ def GearVision(img):
 
 			#if(cY<HEIGHT - 1*HEIGHT/5 and cY>HEIGHT/4): #LITERALLY CHANGE
 			x,y,w,h = cv2.boundingRect(c)
+
 			#print h/w
-			if(h / w >= 2):
+			if(h/w >= 2 and h/w < 4):
 				xCenterValues.append(cX)
 				yCenterValues.append(cY)
 				FINALCONTOURS.append(c)
@@ -94,10 +95,13 @@ def GearVision(img):
 	targetcentersX = []
 	targetcentersY = []
 
+	#for i in range(0,len(FINALCONTOURS)):
+		#cv2.drawContours(edges,FINALCONTOURS,i,(0,255,0),3) #draw the contour
+
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(cv2.contourArea(FINALCONTOURS[i])>200 and cv2.contourArea(FINALCONTOURS[i])<4000): #we know the targets area must be in this range
+		if(cv2.contourArea(FINALCONTOURS[i])>100 and cv2.contourArea(FINALCONTOURS[i])<7000): #we know the targets area must be in this range
 			cv2.circle(edges,(xCenterValues[i],yCenterValues[i]),5,(239,95,255),-1) #draw the circle where center is
 			#print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
@@ -124,7 +128,7 @@ def GearVision(img):
 HEIGHT = 480
 WIDTH = 640
 
-RUNTIME = 60 #seconds of how long program should run
+RUNTIME = 5 #seconds of how long program should run
 
 COLORIMAGEARRAY = []
 DEPTHIMAGEARRAY = []
@@ -150,7 +154,7 @@ while(hasConnectedToPogace==False and time.time()-timeouttoconnect<120): #try co
 		hasConnectedToPogace = False
 
 #in form hbound, sbound, vbound
-s.send('change hsv;83;255;50;255;240;255!')
+s.send('change hsv;52;142;34;255;180;255!')
 
 try:
 	startframetime = time.time()
@@ -233,8 +237,8 @@ for i in range(0,len(COLORIMAGEARRAY)):
 	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/colorimage' + str(i) + '.bmp', COLORIMAGEARRAY[i])
 
 
-for w in range(0,len(DEPTHIMAGEARRAY)):
- 	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/depthimage' + str(w) + '.bmp', DEPTHIMAGEARRAY[w])
+#for w in range(0,len(DEPTHIMAGEARRAY)):
+ #	cv2.imwrite('/Users/harshayugirase/Desktop/LiveFeed/depthimage' + str(w) + '.bmp', DEPTHIMAGEARRAY[w])
  
 print
 print 'Program done running :D'
