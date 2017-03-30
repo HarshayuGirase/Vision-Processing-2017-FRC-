@@ -6,10 +6,10 @@ import time
 import select
 import math
 import random
-import PIL
+
 
 host = '' #bind to any interface...                     
-udpport = 2405
+udpport = 2406
 
 udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udps.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -31,8 +31,8 @@ def getDistanceAngle(xCoordinate):
 def GearVision(img):
 	kernel = np.ones((3,3))
 	ret,threshold = cv2.threshold(np.uint8(img),0,60000,cv2.THRESH_BINARY)
-	erosion = cv2.erode(threshold,kernel,iterations = 6) #increase if necessary 
-	dilation = cv2.dilate(erosion,kernel,iterations = 5)
+	erosion = cv2.erode(img,kernel,iterations = 6) #increase if necessary 
+	dilation = cv2.dilate(erosion,kernel,iterations = 4)
 	start_time = time.clock()
 	edges = cv2.Canny(np.uint8(dilation),4,2) #edge detection after some noise filtering   
 
@@ -101,7 +101,7 @@ def GearVision(img):
 	for i in range(0,len(yCenterValues)):
 		width = len(edges[0])
 		height = sum([len(arr) for arr in edges])/width
-		if(cv2.contourArea(FINALCONTOURS[i])>100 and cv2.contourArea(FINALCONTOURS[i])<7000): #we know the targets area must be in this range
+		if(cv2.contourArea(FINALCONTOURS[i])>300 and cv2.contourArea(FINALCONTOURS[i])<7000): #we know the targets area must be in this range
 			cv2.circle(edges,(xCenterValues[i],yCenterValues[i]),5,(239,95,255),-1) #draw the circle where center is
 			#print ('X Center is: ' + str(xCenterValues[i])) #calculate the x value of the center...
 			targetcentersX.append(xCenterValues[i])
@@ -121,22 +121,20 @@ def GearVision(img):
 	else:
 		return (69,69)
 	
-	
-
 
 
 HEIGHT = 480
 WIDTH = 640
 
-RUNTIME = 5 #seconds of how long program should run
+RUNTIME = 30 #seconds of how long program should run
 
 COLORIMAGEARRAY = []
 DEPTHIMAGEARRAY = []
 start_time = time.clock()
 print 'Program has started.'
 
-#TCP_IP = '10.23.67.71'
-TCP_IP = '192.168.1.2'
+TCP_IP = '10.23.67.71'
+#TCP_IP = '192.168.1.2'
 TCP_PORT = 2374
 BUFFER_SIZE = 9999
 
@@ -154,7 +152,7 @@ while(hasConnectedToPogace==False and time.time()-timeouttoconnect<120): #try co
 		hasConnectedToPogace = False
 
 #in form hbound, sbound, vbound
-s.send('change hsv;52;142;34;255;180;255!')
+s.send('change hsv;95;143;85;255;205;255!')
 
 try:
 	startframetime = time.time()
@@ -189,8 +187,10 @@ try:
 
 		if(centersTuple[0]!=69 and centersTuple[1]!=69):
 			angle = getDistanceAngle(sum(centersTuple[0])/len(centersTuple[0]))
-			angle = angle + 1
+			angle = angle + 2
+			udps.open()
 			udps.sendto(str(angle),("10.23.67.255",udpport))
+			udps.close()
 			print 'Angle is::::::: ' + str(angle)
 
 		# #THIS FOLLOWING CODE SEGMENT IS FOR DEPTH... but i don't want depth right now....
