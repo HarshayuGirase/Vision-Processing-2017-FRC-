@@ -2,7 +2,6 @@ import numpy as np
 import cv2
 import time
 import multiprocessing
-import math
 
 
 img = cv2.imread('/Users/harshayugirase/Desktop/output1.bmp', cv2.IMREAD_UNCHANGED)
