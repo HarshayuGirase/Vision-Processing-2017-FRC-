@@ -5,7 +5,6 @@ import sys
 import time
 import select
 import math
-import random
 
 
 host = '' #bind to any interface...                     
